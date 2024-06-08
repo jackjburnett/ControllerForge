@@ -1,3 +1,8 @@
+# CadQuery testing
+utils/cadquery_test_results/result.dxf
+utils/cadquery_test_results/result.step
+utils/cadquery_test_results/result.stl
+
 # VSCode
 .vscode/*
 !.vscode/settings.json
