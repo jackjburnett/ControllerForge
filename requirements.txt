@@ -1,1 +1,4 @@
 cadquery~=master
+numpy~=1.26.4
+scikit-learn~=1.4.2
+skl2onnx~=1.16.0

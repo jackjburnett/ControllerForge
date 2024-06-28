@@ -14,5 +14,5 @@ clr.fit(X_train, y_train)
 from skl2onnx import to_onnx
 
 onx = to_onnx(clr, X[:1])
-with open("rf_iris.onnx", "wb") as f:
+with open("trained_model.onnx", "wb") as f:
     f.write(onx.SerializeToString())
