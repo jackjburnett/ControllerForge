@@ -14,4 +14,4 @@ generate_stl.generate_button_cap(
     mount_radius=(kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1,
     wall_thickness=1.0,
 ).save("generated_files/cap.step")
-get_model
+get_model.get_model()

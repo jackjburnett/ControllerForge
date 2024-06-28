@@ -1,5 +1,10 @@
+import onnx
+
+
+# TODO: ONNX extension validation
 def get_model(path="parameter_store/ai_models/", onnx_name="trained_model"):
-    pass
+    model = onnx.load(path + onnx_name + ".onnx")
+    return model
 
 
 if __name__ == "__main__":

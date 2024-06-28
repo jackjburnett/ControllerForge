@@ -1,6 +1,7 @@
 import onnxruntime as rt
 
 
+# TODO: ONNX extension validation
 def predict_parameters(path="parameter_store/ai_models/", onnx_name="trained_model"):
     sess = rt.InferenceSession(
         path + onnx_name + ".onnx", providers=["CPUExecutionProvider"]

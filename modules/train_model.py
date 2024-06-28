@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 
+# TODO: accept new model names
 def train_model(path="parameter_store/ai_models/"):
     iris = load_iris()
     X, y = iris.data, iris.target
