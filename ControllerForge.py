@@ -1,8 +1,7 @@
 import argparse
 
-from flask import Flask
+from flask import Flask, send_file
 
-import modules.get_model as get_model
 import modules.train_model as train_model
 import parameter_store.default_values as default_values
 import utils.pipeline_test as pipeline_test
@@ -12,7 +11,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Hello, World!"
+    return "Connected to ControllerForge."
 
 
 @app.route("/train_model", methods=["GET"])
@@ -23,7 +22,31 @@ def train_model_call():
 
 @app.route("/get_model", methods=["GET"])
 def get_model_call():
-    return get_model.get_model()
+    return send_file("parameter_store/ai_models/trained_model.onnx")
+
+
+# TODO: Implement this
+@app.route("/predict_parameters", methods=["POST"])
+def predict_parameters_call():
+    pass
+
+
+# TODO: Implement this
+@app.route("/generate_stl", methods=["POST"])
+def generate_stl_call():
+    pass
+
+
+# TODO: Implement this
+@app.route("/generate_pcb", methods=["POST"])
+def generate_pcb_call():
+    pass
+
+
+# TODO: Implement this
+@app.route("/check_conflict", methods=["POST"])
+def check_conflict_call():
+    pass
 
 
 def parse_args():
