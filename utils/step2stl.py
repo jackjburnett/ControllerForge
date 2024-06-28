@@ -15,4 +15,5 @@ def step2stl(filename):
         return 0
 
 
-# step2stl("cap")
+if __name__ == "__main__":
+    step2stl("test_results/step_test")

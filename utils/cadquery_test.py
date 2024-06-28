@@ -26,14 +26,14 @@ result = (
 )
 
 # Export
-cq.exporters.export(result, "cadquery_test_results/result.stl")
-cq.exporters.export(result.section(), "cadquery_test_results/result.dxf")
-cq.exporters.export(result, "cadquery_test_results/result.step")
+cq.exporters.export(result, "test_results/result.stl")
+cq.exporters.export(result.section(), "test_results/result.dxf")
+cq.exporters.export(result, "test_results/result.step")
 
 # Check diff
 # As long as only the FILE_NAME line is output, cadquery is working fine
-with open("cadquery_test_results/expected_result.step", "r") as expected_result:
-    with open("cadquery_test_results/result.step", "r") as result:
+with open("test_results/expected_result.step", "r") as expected_result:
+    with open("test_results/result.step", "r") as result:
         diff = difflib.unified_diff(
             expected_result.readlines(),
             result.readlines(),

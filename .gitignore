@@ -2,9 +2,10 @@
 modules/test_files/*
 
 # CadQuery testing
-utils/cadquery_test_results/result.dxf
-utils/cadquery_test_results/result.step
-utils/cadquery_test_results/result.stl
+utils/test_results/result.dxf
+utils/test_results/result.step
+utils/test_results/result.stl
+utils/test_results/step_test.stl
 
 # VSCode
 .vscode/*

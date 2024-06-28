@@ -1,8 +1,6 @@
 import json
 
-import modules.generate_stl as generate_stl
-import modules.get_model as get_model
-import modules.train_model as train_model
+from modules import generate_stl, get_model, train_model
 
 
 def pipeline_test():

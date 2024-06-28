@@ -2,9 +2,9 @@ import argparse
 
 from flask import Flask, send_file
 
-import modules.train_model as train_model
-import parameter_store.default_values as default_values
-import utils.pipeline_test as pipeline_test
+from modules import train_model, predict_parameters, generate_stl
+from parameter_store import default_values
+from utils import pipeline_test
 
 app = Flask(__name__)
 
@@ -28,13 +28,13 @@ def get_model_call():
 # TODO: Implement this
 @app.route("/predict_parameters", methods=["POST"])
 def predict_parameters_call():
-    pass
+    predict_parameters.predict_parameters()
 
 
 # TODO: Implement this
 @app.route("/generate_stl", methods=["POST"])
 def generate_stl_call():
-    pass
+    return generate_stl
 
 
 # TODO: Implement this
