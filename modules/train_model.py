@@ -1,4 +1,5 @@
 import numpy as np
+
 # Convert into ONNX format.
 from skl2onnx import to_onnx
 from sklearn.datasets import load_iris
