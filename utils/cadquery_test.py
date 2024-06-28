@@ -1,6 +1,7 @@
-import cadquery as cq
 import difflib
 import sys
+
+import cadquery as cq
 
 height = 60.0
 width = 80.0
@@ -30,7 +31,7 @@ cq.exporters.export(result.section(), "cadquery_test_results/result.dxf")
 cq.exporters.export(result, "cadquery_test_results/result.step")
 
 # Check diff
-##As long as only the FILE_NAME line is output, cadquery is working fine
+# As long as only the FILE_NAME line is output, cadquery is working fine
 with open("cadquery_test_results/expected_result.step", "r") as expected_result:
     with open("cadquery_test_results/result.step", "r") as result:
         diff = difflib.unified_diff(

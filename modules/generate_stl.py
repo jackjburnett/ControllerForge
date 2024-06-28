@@ -40,4 +40,4 @@ def generate_button_cap(
     return cap
 
 
-generate_button_cap(wall_thickness=1.0).save("cap.step")
+# generate_button_cap(wall_thickness=1.0).save("cap.step")
