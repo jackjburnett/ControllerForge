@@ -1,0 +1,18 @@
+{
+  "_template": {
+    "dimensions": {
+      "mount": {
+        "type": "undefined",
+        "height": -1
+      },
+      "box": {}
+    },
+    "type": "undefined",
+    "click_mechanism": "undefined",
+    "specifications": {
+      "actuation(gf)": -1,
+      "travel(mm)": -1,
+      "pretravel(mm)": -1
+    }
+  }
+}
