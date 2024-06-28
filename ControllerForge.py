@@ -2,10 +2,28 @@ import argparse
 
 from flask import Flask
 
+import modules.get_model as get_model
+import modules.train_model as train_model
 import parameter_store.default_values as default_values
 import utils.pipeline_test as pipeline_test
 
 app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    return "Hello, World!"
+
+
+@app.route("/train_model", methods=["GET"])
+def train_model_call():
+    train_model.train_model()
+    return "Model Trained"
+
+
+@app.route("/get_model", methods=["GET"])
+def get_model_call():
+    return get_model.get_model()
 
 
 def parse_args():
