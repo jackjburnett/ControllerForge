@@ -1,0 +1,36 @@
+{
+  "_template": {
+    "dimensions": {
+      "mount": {
+        "type": "undefined",
+        "height": -1
+      },
+      "box": {}
+    },
+    "type": "undefined",
+    "click_mechanism": "undefined",
+    "specifications": {
+      "actuation(gf)": -1,
+      "travel(mm)": -1,
+      "pretravel(mm)": -1
+    }
+  },
+  "Red": {
+    "dimensions": {
+      "mount": {
+        "type": "Cherry MX",
+        "height": 4.05,
+        "cross_width": 4.2,
+        "cross_length": 1.4
+      },
+      "box": {}
+    },
+    "type": "Clicky",
+    "click_mechanism": "None",
+    "specifications": {
+      "actuation(gf)": 50,
+      "travel(mm)": 4,
+      "pretravel(mm)": 2
+    }
+  }
+}
