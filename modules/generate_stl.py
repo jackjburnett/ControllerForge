@@ -41,4 +41,4 @@ def generate_button_cap(
 
 
 if __name__ == "__main__":
-    generate_button_cap(wall_thickness=1.0).save("cap.step")
+    generate_button_cap(wall_thickness=1.0).save("test_files/cap.step")

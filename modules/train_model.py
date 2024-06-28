@@ -21,4 +21,4 @@ def train_model(path="parameter_store/ai_models/"):
 
 
 if __name__ == "__main__":
-    train_model(path="")
+    train_model(path="test_files/")

@@ -1,3 +1,6 @@
+# Modules testing
+modules/test_files/*
+
 # CadQuery testing
 utils/cadquery_test_results/result.dxf
 utils/cadquery_test_results/result.step
