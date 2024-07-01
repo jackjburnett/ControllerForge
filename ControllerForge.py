@@ -4,7 +4,7 @@ from flask import Flask, send_file
 
 from modules import train_model, predict_parameters, generate_stl
 from parameter_store import default_values
-from utils import pipeline_test
+from utils import pipeline_test, step2stl
 
 app = Flask(__name__)
 
@@ -26,15 +26,17 @@ def get_model_call():
 
 
 # TODO: Implement this
-@app.route("/predict_parameters", methods=["POST"])
+@app.route("/predict_parameters", methods=["GET"])
 def predict_parameters_call():
     predict_parameters.predict_parameters()
 
 
 # TODO: Implement this
-@app.route("/generate_stl", methods=["POST"])
+@app.route("/generate_stl", methods=["GET"])
 def generate_stl_call():
-    return generate_stl
+    generate_stl().save("generated_files/cap.step")
+    step2stl("generated_files/cap.step")
+    return send_file("generated_files/cap.stl")
 
 
 # TODO: Implement this
