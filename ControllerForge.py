@@ -22,7 +22,11 @@ def train_model_call():
 
 @app.route("/get_model", methods=["GET"])
 def get_model_call():
-    return send_file("parameter_store/ai_models/trained_model.onnx")
+    return send_file(
+        "parameter_store/ai_models/trained_model.onnx",
+        download_name="trained_model.onnx",
+        mimetype="application/onnx",
+    )
 
 
 # TODO: Implement this
@@ -53,7 +57,11 @@ def generate_stl_call():
             zipped_controller = zipfiles.zip_controller_files(
                 base=base, buttons=buttons
             )
-            return send_file(zipped_controller)
+            return send_file(
+                zipped_controller,
+                download_name="controller_files.zip",
+                mimetype="application/zip",
+            )
         except Exception as e:
             return jsonify({"error": str(e)}), 400
         else:
