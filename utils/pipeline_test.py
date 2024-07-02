@@ -1,19 +1,42 @@
 import json
 
 from modules import generate_stl, get_model, train_model
+from utils import step2stl, zipfiles
 
 
 def pipeline_test():
     train_model.train_model()
     with open("parameter_store/switches/kailh.json") as f:
         kailh = json.load(f)
-    generate_stl.generate_button_cap(
-        mount_height=kailh["Red"]["dimensions"]["mount"]["height"],
-        mount_cross_width=kailh["Red"]["dimensions"]["mount"]["cross_width"],
-        mount_cross_length=kailh["Red"]["dimensions"]["mount"]["cross_length"],
-        mount_radius=(kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1,
-        wall_thickness=1.0,
-    ).save("generated_files/cap.step")
+    buttons = {
+        "button1": {
+            "button_x": -10,
+            "button_y": -5,
+            "button_width": 24.0,
+            "top_thickness": 2.0,
+            "wall_thickness": 0.0,
+            "wall_height": 3.0,
+            "bevel": True,
+            "mount_height": kailh["Red"]["dimensions"]["mount"]["height"],
+            "mount_cross_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
+            "mount_cross_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
+            "mount_radius": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
+            + 1,
+        }
+    }
+    base = {
+        "base_height": 50,
+        "base_width": 200,
+        "base_length": 100,
+        "wall_thickness": 5,
+        "rounded_edges": True,
+        "screws": False,
+        "screw_radius": 1,
+        "corner_radius": 5,
+    }
+    generate_stl.generate_controller_files(base=base, buttons=buttons)
+    step2stl.step2stl("generated_files/controller.step")
+    zipfiles.zip_controller_files(base=base, buttons=buttons)
 
     get_model.get_model()
     return "Pipeline Test Complete"

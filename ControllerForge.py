@@ -4,7 +4,7 @@ from flask import Flask, send_file, request, jsonify
 
 from modules import train_model, predict_parameters, generate_stl
 from parameter_store import default_values
-from utils import pipeline_test
+from utils import pipeline_test, step2stl, zipfiles
 
 app = Flask(__name__)
 
@@ -48,8 +48,12 @@ def generate_stl_call():
                 base = None
 
             generate_stl.generate_controller_files(base=base, buttons=buttons)
-
-            return send_file(zipfile)
+            if base is not None and buttons is not None:
+                step2stl.step2stl("generated_files/controller.step")
+            zipped_controller = zipfiles.zip_controller_files(
+                base=base, buttons=buttons
+            )
+            return send_file(zipped_controller)
         except Exception as e:
             return jsonify({"error": str(e)}), 400
         else:
