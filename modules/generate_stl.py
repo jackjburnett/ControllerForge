@@ -54,23 +54,23 @@ def generate_base(
     # Set corner positions in advance
     positions = [
         (
-            -(base_width / 2 - (wall_thickness * 2)),
-            -(base_length / 2 - (wall_thickness * 2)),
+            -(base_width / 2 - (wall_thickness + corner_radius)),
+            -(base_length / 2 - (wall_thickness + corner_radius)),
             wall_thickness,
         ),
         (
-            -(base_width / 2 - (wall_thickness * 2)),
-            base_length / 2 - (wall_thickness * 2),
+            -(base_width / 2 - (wall_thickness + corner_radius)),
+            base_length / 2 - (wall_thickness + corner_radius),
             wall_thickness,
         ),
         (
-            base_width / 2 - (wall_thickness * 2),
-            -(base_length / 2 - (wall_thickness * 2)),
+            base_width / 2 - (wall_thickness + corner_radius),
+            -(base_length / 2 - (wall_thickness + corner_radius)),
             wall_thickness,
         ),
         (
-            base_width / 2 - (wall_thickness * 2),
-            base_length / 2 - (wall_thickness * 2),
+            base_width / 2 - (wall_thickness + corner_radius),
+            base_length / 2 - (wall_thickness + corner_radius),
             wall_thickness,
         ),
     ]
@@ -85,7 +85,7 @@ def generate_base(
     bottom_base = bottom_base.cut(inner_base)
     # Add rounded edges to bottom base
     if rounded_edges:
-        bottom_base = bottom_base.fillet(2)
+        bottom_base = bottom_base.fillet(1)
     # Add corners for screw/plugs to bottom base
     corner = cq.Workplane().circle(corner_radius).extrude(base_height - wall_thickness)
     corners = cq.Workplane()
@@ -113,7 +113,7 @@ def generate_base(
     )
     # Add rounded edges to the top base
     if rounded_edges:
-        top_base = top_base.fillet(2)
+        top_base = top_base.fillet(1)
     # Add the screw holes or slots to the top base
     if screws:
         top_base = top_base.cut(corner_holes.translate((0, 0, -wall_thickness)))
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         "base_height": 50,
         "base_width": 200,
         "base_length": 100,
-        "wall_thickness": 20,
+        "wall_thickness": 2.5,
         "rounded_edges": True,
         "screws": False,
         "screw_radius": 1,
