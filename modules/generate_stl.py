@@ -46,7 +46,7 @@ def generate_base(
     base_width=200,
     base_length=100,
     wall_thickness=5,
-    rounded_edges=True,
+    rounded_edges=False,
     screws=False,
     screw_radius=1,
     corner_radius=5,
