@@ -41,6 +41,7 @@ def generate_button_cap(
     return cap
 
 
+# TODO: What if base is larger than printer?
 def generate_base(
     base_height=50,
     base_width=200,
