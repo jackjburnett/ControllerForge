@@ -80,7 +80,7 @@ def generate_base(
     inner_base = (
         cq.Workplane()
         .rect(base_width - (wall_thickness * 2), base_length - (wall_thickness * 2))
-        .extrude(base_height - (wall_thickness * 2))
+        .extrude(base_height - wall_thickness)
     )
     bottom_base = bottom_base.cut(inner_base)
     # Add rounded edges to bottom base
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         "base_height": 50,
         "base_width": 200,
         "base_length": 100,
-        "wall_thickness": 5,
+        "wall_thickness": 20,
         "rounded_edges": True,
         "screws": False,
         "screw_radius": 1,
