@@ -13,7 +13,7 @@ def zip_controller_files(base=None, buttons=None, path="generated_files/"):
             files.append(path + "button" + str(i) + ".step")
             i += 1
     if buttons is not None and base is not None:
-        files.append(path + "base.stl")
+        files.append(path + "controller.stl")
     # Create a ZipFile object
     with ZipFile(path + "controller_files.zip", "w", ZIP_DEFLATED) as zipf:
         # Add each file to the ZIP file
