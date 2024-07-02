@@ -1,3 +1,6 @@
+# Generated files
+/generated_files/*
+
 # Modules testing
 modules/test_files/*
 
