@@ -1,7 +1,6 @@
 import cadquery as cq
 
 
-# TODO: Implement further mount types
 def generate_button_cap(
     button_width=24.0,
     top_thickness=2.0,
@@ -19,6 +18,7 @@ def generate_button_cap(
     if bevel:
         top = top.edges().fillet(0.99)
     # Create the mount
+    # TODO: Implement further mount types and check current mount type
     mount_cross = (
         cq.Workplane()
         .rect(mount_cross_width, mount_cross_length)
