@@ -142,19 +142,22 @@ def generate_controller(
         base_top, base_bottom = generate_base()
     button_steps = []
     if buttons is not None:
-        for button_values in buttons.values():
+        for button_name, button_values in buttons.items():
             button_steps.append(
-                generate_button_cap(
-                    button_values["button_width"],
-                    button_values["top_thickness"],
-                    button_values["wall_thickness"],
-                    button_values["wall_height"],
-                    button_values["bevel"],
-                    button_values["mount_height"],
-                    button_values["mount_radius"],
-                    button_values["mount_cross_width"],
-                    button_values["mount_cross_length"],
-                )
+                [
+                    generate_button_cap(
+                        button_values["button_width"],
+                        button_values["top_thickness"],
+                        button_values["wall_thickness"],
+                        button_values["wall_height"],
+                        button_values["bevel"],
+                        button_values["mount_height"],
+                        button_values["mount_radius"],
+                        button_values["mount_cross_width"],
+                        button_values["mount_cross_length"],
+                    ),
+                    button_name,
+                ]
             )
             if base is not None:
                 button_hole = (
@@ -176,7 +179,7 @@ def generate_controller_assembly(
     i = 0
     for button_values in buttons.values():
         controller_assembly.add(
-            button_steps[i],
+            button_steps[i][0],
             loc=cq.Location(
                 (
                     button_values["button_x"],
@@ -195,8 +198,8 @@ def generate_controller_files(path="generated_files/", base=None, buttons=None):
     )
     cq.exporters.export(base_top, path + "base_top.step")
     cq.exporters.export(base_bottom, path + "base_bottom.step")
-    for index, button in enumerate(button_steps):
-        button.save(path + "/button" + str(index) + ".step")
+    for button in button_steps:
+        button[0].save(path + button[1] + ".step")
     if base is not None and buttons is not None:
         generate_controller_assembly(
             base_top=base_top,
@@ -215,7 +218,7 @@ if __name__ == "__main__":
     # base = (cq.Assembly().add(base_top).add(base_bottom)).save("test_files/base.step")
 
     buttons = {
-        "button1": {
+        "UP": {
             "button_x": -10,
             "button_y": -5,
             "button_width": 24.0,
@@ -228,7 +231,7 @@ if __name__ == "__main__":
             "mount_cross_width": 4.2,
             "mount_cross_length": 1.4,
         },
-        "button2": {
+        "DOWN": {
             "button_x": -50,
             "button_y": 10,
             "button_width": 24.0,

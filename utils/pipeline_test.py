@@ -9,20 +9,36 @@ def pipeline_test():
     with open("parameter_store/switches/kailh.json") as f:
         kailh = json.load(f)
     buttons = {
-        "button1": {
+        "UP": {
             "button_x": -10,
             "button_y": -5,
             "button_width": 24.0,
             "top_thickness": 2.0,
             "wall_thickness": 0.0,
             "wall_height": 3.0,
+            "bevel": False,
+            "mount_height": kailh["Red"]["dimensions"]["mount"]["height"],
+            "mount_cross_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
+            "mount_cross_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
+            "mount_radius": (
+                (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1
+            ),
+        },
+        "DOWN": {
+            "button_x": 35,
+            "button_y": 10,
+            "button_width": 30.0,
+            "top_thickness": 2.0,
+            "wall_thickness": 1.0,
+            "wall_height": 3.0,
             "bevel": True,
             "mount_height": kailh["Red"]["dimensions"]["mount"]["height"],
             "mount_cross_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
             "mount_cross_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
-            "mount_radius": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
-            + 1,
-        }
+            "mount_radius": (
+                (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1
+            ),
+        },
     }
     base = {
         "base_height": 50,

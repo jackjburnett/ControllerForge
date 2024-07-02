@@ -7,11 +7,8 @@ def zip_controller_files(base=None, buttons=None, path="generated_files/"):
         files.append(path + "base_top.step")
         files.append(path + "base_bottom.step")
     if buttons is not None:
-        # TODO
-        i = 0
-        for button in buttons.values():
-            files.append(path + "button" + str(i) + ".step")
-            i += 1
+        for button in buttons.keys():
+            files.append(path + button + ".step")
     if buttons is not None and base is not None:
         files.append(path + "controller.stl")
     # Create a ZipFile object
@@ -23,8 +20,8 @@ def zip_controller_files(base=None, buttons=None, path="generated_files/"):
 
 if __name__ == "__main__":
     buttons = {
-        "button1": {},
-        "button2": {},
+        "Up": {},
+        "Down": {},
     }
     base = {}
     zip_controller_files(base=base, buttons=buttons, path="test_results/")
