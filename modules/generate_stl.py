@@ -123,26 +123,22 @@ def generate_base(
 
 
 def generate_controller(
-    base_height=50,
-    base_width=200,
-    base_length=100,
-    base_wall_thickness=5,
-    rounded_edges=True,
-    screws=False,
-    screw_radius=1,
-    corner_radius=5,
+    base=None,
     buttons=None,
 ):
-    base_top, base_bottom = generate_base(
-        base_height,
-        base_width,
-        base_length,
-        base_wall_thickness,
-        rounded_edges,
-        screws,
-        screw_radius,
-        corner_radius,
-    )
+    if base is not None:
+        base_top, base_bottom = generate_base(
+            base["base_height"],
+            base["base_width"],
+            base["base_length"],
+            base["wall_thickness"],
+            base["rounded_edges"],
+            base["screws"],
+            base["screw_radius"],
+            base["corner_radius"],
+        )
+    else:
+        base_top, base_bottom = generate_base()
     button_steps = []
     if buttons is not None:
         for button_values in buttons.values():
@@ -159,13 +155,16 @@ def generate_controller(
                     button_values["mount_cross_length"],
                 )
             )
-            button_hole = (
-                cq.Workplane()
-                .circle(button_values["button_width"] / 2)
-                .extrude(base_wall_thickness)
-                .translate((button_values["button_x"], button_values["button_y"], 0))
-            )
-            base_top = base_top.cut(button_hole)
+            if base is not None:
+                button_hole = (
+                    cq.Workplane()
+                    .circle(button_values["button_width"] / 2)
+                    .extrude(base["wall_thickness"])
+                    .translate(
+                        (button_values["button_x"], button_values["button_y"], 0)
+                    )
+                )
+                base_top = base_top.cut(button_hole)
     return base_top, base_bottom, button_steps
 
 
@@ -195,14 +194,29 @@ if __name__ == "__main__":
             "button_y": 10,
             "button_width": 24.0,
             "top_thickness": 2.0,
-            "wall_thickness": 0.0,
+            "wall_thickness": 1.0,
             "wall_height": 3.0,
-            "bevel": False,
+            "bevel": True,
             "mount_height": 4.0,
             "mount_radius": 3.0,
             "mount_cross_width": 4.2,
             "mount_cross_length": 1.4,
         },
     }
-    base_top, base_bottom, button_steps = generate_controller(buttons=buttons)
+    base = {
+        "base_height": 50,
+        "base_width": 200,
+        "base_length": 100,
+        "wall_thickness": 5,
+        "rounded_edges": True,
+        "screws": False,
+        "screw_radius": 1,
+        "corner_radius": 5,
+    }
+    base_top, base_bottom, button_steps = generate_controller(
+        base=base, buttons=buttons
+    )
     cq.exporters.export(base_top, "test_files/base_top.step")
+    cq.exporters.export(base_bottom, "test_files/base_bottom.step")
+    for index, button in enumerate(button_steps):
+        button.save("test_files/button" + str(index) + ".step")
