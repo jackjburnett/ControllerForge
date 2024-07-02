@@ -1,10 +1,10 @@
 import argparse
 
-from flask import Flask, send_file
+from flask import Flask, send_file, request, jsonify
 
 from modules import train_model, predict_parameters, generate_stl
 from parameter_store import default_values
-from utils import pipeline_test, step2stl
+from utils import pipeline_test
 
 app = Flask(__name__)
 
@@ -32,11 +32,28 @@ def predict_parameters_call():
 
 
 # TODO: Implement this
-@app.route("/generate_stl", methods=["GET"])
+@app.route("/generate_stl", methods=["POST"])
 def generate_stl_call():
-    generate_stl().save("generated_files/cap.step")
-    step2stl("generated_files/cap.step")
-    return send_file("generated_files/cap.stl")
+    if request.is_json:
+        try:
+            # Parse the JSON data from the request
+            json_data = request.get_json()
+            if "buttons" in json_data:
+                buttons = json_data["buttons"]
+            else:
+                buttons = None
+            if "base" in json_data:
+                base = json_data["base"]
+            else:
+                base = None
+
+            generate_stl.generate_controller_files(base=base, buttons=buttons)
+
+            return send_file(zipfile)
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+        else:
+            return jsonify({"error": "Request does not contain JSON data"}), 400
 
 
 # TODO: Implement this

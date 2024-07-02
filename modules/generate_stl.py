@@ -158,7 +158,7 @@ def generate_controller(
             if base is not None:
                 button_hole = (
                     cq.Workplane()
-                    .circle(button_values["button_width"] / 2)
+                    .circle((button_values["button_width"] / 2) + 1)
                     .extrude(base["wall_thickness"])
                     .translate(
                         (button_values["button_x"], button_values["button_y"], 0)
@@ -166,6 +166,44 @@ def generate_controller(
                 )
                 base_top = base_top.cut(button_hole)
     return base_top, base_bottom, button_steps
+
+
+def generate_controller_assembly(
+    base_top, base_bottom, button_steps, buttons, path="generated_files/"
+):
+    controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
+    i = 0
+    for button_values in buttons.values():
+        controller_assembly.add(
+            button_steps[i],
+            loc=cq.Location(
+                (
+                    button_values["button_x"],
+                    button_values["button_y"],
+                    -button_values["mount_height"],
+                )
+            ),
+        )
+        i += 1
+    controller_assembly.save(path + "controller.step")
+
+
+def generate_controller_files(path="generated_files/", base=None, buttons=None):
+    base_top, base_bottom, button_steps = generate_controller(
+        base=base, buttons=buttons
+    )
+    cq.exporters.export(base_top, path + "base_top.step")
+    cq.exporters.export(base_bottom, path + "base_bottom.step")
+    for index, button in enumerate(button_steps):
+        button.save(path + "/button" + str(index) + ".step")
+    if base is not None and buttons is not None:
+        generate_controller_assembly(
+            base_top=base_top,
+            base_bottom=base_bottom,
+            buttons=buttons,
+            button_steps=button_steps,
+            path=path,
+        )
 
 
 if __name__ == "__main__":
@@ -213,10 +251,4 @@ if __name__ == "__main__":
         "screw_radius": 1,
         "corner_radius": 5,
     }
-    base_top, base_bottom, button_steps = generate_controller(
-        base=base, buttons=buttons
-    )
-    cq.exporters.export(base_top, "test_files/base_top.step")
-    cq.exporters.export(base_bottom, "test_files/base_bottom.step")
-    for index, button in enumerate(button_steps):
-        button.save("test_files/button" + str(index) + ".step")
+    generate_controller_files(path="test_files/", base=base, buttons=buttons)
