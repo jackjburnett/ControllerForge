@@ -242,7 +242,7 @@ if __name__ == "__main__":
         },
     }
     base = {
-        "base_height": 50,
+        "base_height": 25,
         "base_width": 200,
         "base_length": 100,
         "wall_thickness": 2.5,
