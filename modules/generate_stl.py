@@ -231,6 +231,7 @@ def generate_controller_files(path="generated_files/", base=None, buttons=None):
             path=path,
         )
 
+
 # TODO: Comment
 if __name__ == "__main__":
     buttons = {

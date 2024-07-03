@@ -10,13 +10,15 @@ def pipeline_test():
         kailh = json.load(f)
     buttons = {
         "UP": {
-            "button_x": -10,
-            "button_y": -5,
-            "button_width": 24.0,
-            "top_thickness": 2.0,
-            "wall_thickness": 0.0,
-            "wall_height": 3.0,
+            "x": -10,
+            "y": -5,
+            "diameter": 24.0,
+            "thickness": 2.0,
             "bevel": False,
+            "wall": {
+                "thickness": 0.0,
+                "height": 0.0,
+            },
             "mount": {
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
@@ -27,13 +29,15 @@ def pipeline_test():
             },
         },
         "DOWN": {
-            "button_x": 35,
-            "button_y": 10,
-            "button_width": 30.0,
-            "top_thickness": 2.0,
-            "wall_thickness": 1.0,
-            "wall_height": 3.0,
+            "x": 35,
+            "y": 10,
+            "diameter": 30.0,
+            "thickness": 2.0,
             "bevel": True,
+            "wall": {
+                "thickness": 1.0,
+                "height": 3.0,
+            },
             "mount": {
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
