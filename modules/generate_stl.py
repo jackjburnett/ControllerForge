@@ -44,7 +44,9 @@ def generate_button_cap(
             .extrude(mount_values["height"])
             .cut(mount_X_point)
         )
-    # If the walls have a thickness and height above 0, they are generated
+    # Combine all parts of the button cap into an assembly
+    cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
+    # If the walls have a thickness and height above 0, they are generated then added to the assembly
     if wall_thickness > 0.0 and wall_height > 0.0:
         walls = (
             cq.Workplane()
@@ -52,11 +54,8 @@ def generate_button_cap(
             .circle((diameter / 2) - wall_thickness)
             .extrude(wall_height)
         )
-    # Combine all parts of the button into an assembly
-    cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
-    if wall_thickness > 0.0 and wall_height > 0.0:
         cap.add(walls, loc=cq.Location((0, 0, thickness / 2)))
-    # Return the assembled button
+    # Return the assembled button cap
     return cap
 
 
