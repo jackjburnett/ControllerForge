@@ -78,15 +78,15 @@ def generate_base(
 
     # Create bottom of base
     bottom_base = cq.Workplane().rect(base_width, base_length).extrude(base_height)
+    # Add rounded edges to bottom base
+    if rounded_edges:
+        bottom_base = bottom_base.fillet(1)
     inner_base = (
         cq.Workplane()
         .rect(base_width - (wall_thickness * 2), base_length - (wall_thickness * 2))
         .extrude(base_height - wall_thickness)
     )
     bottom_base = bottom_base.cut(inner_base)
-    # Add rounded edges to bottom base
-    if rounded_edges:
-        bottom_base = bottom_base.fillet(1)
     # Add corners for screw/plugs to bottom base
     corner = cq.Workplane().circle(corner_radius).extrude(base_height - wall_thickness)
     corners = cq.Workplane()
@@ -112,9 +112,6 @@ def generate_base(
         .rect(base_width - (wall_thickness * 2), base_length - (wall_thickness * 2))
         .extrude(wall_thickness)
     )
-    # Add rounded edges to the top base
-    if rounded_edges:
-        top_base = top_base.fillet(1)
     # Add the screw holes or slots to the top base
     if screws:
         top_base = top_base.cut(corner_holes.translate((0, 0, -wall_thickness)))
@@ -251,7 +248,7 @@ if __name__ == "__main__":
         "base_length": 100,
         "wall_thickness": 2.5,
         "rounded_edges": True,
-        "screws": False,
+        "screws": True,
         "screw_radius": 1,
         "corner_radius": 5,
     }
