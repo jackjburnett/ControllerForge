@@ -67,10 +67,16 @@ def generate_button_cap(
     return cap
 
 
+# TODO: Implement
+# TODO: Comment
+def calculate_base_from_buttons(buttons=None):
+    return 1
+
+
 # TODO: What if base is larger than printer?
-# TODO: Automatically calculate based on buttons?
 # TODO: Comment
 def generate_base(
+    base=None,
     base_height=50,
     base_width=200,
     base_length=100,
@@ -153,18 +159,9 @@ def generate_controller(
     base=None,
     buttons=None,
 ):
-    if base is not None:
-        base_top, base_bottom = generate_base(
-            base["base_height"],
-            base["base_width"],
-            base["base_length"],
-            base["wall_thickness"],
-            base["rounded_edges"],
-            base["screw_radius"],
-            base["corner_radius"],
-        )
-    else:
-        base_top, base_bottom = generate_base()
+    if base is None and buttons is not None:
+        base = calculate_base_from_buttons(buttons)
+    base_top, base_bottom = generate_base(base=base)
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
@@ -184,7 +181,7 @@ def generate_controller(
                 button_hole = (
                     cq.Workplane()
                     .circle((button_values["diameter"] / 2) + 1)
-                    .extrude(base["wall_thickness"])
+                    .extrude(base["thickness"])
                     .translate((button_values["x"], button_values["y"], 0))
                 )
                 base_top = base_top.cut(button_hole)
@@ -215,21 +212,22 @@ def generate_controller_assembly(
 # TODO: Comment
 # TODO: Add printer
 def generate_controller_files(path="generated_files/", base=None, buttons=None):
-    base_top, base_bottom, button_steps = generate_controller(
-        base=base, buttons=buttons
-    )
-    cq.exporters.export(base_top, path + "base_top.step")
-    cq.exporters.export(base_bottom, path + "base_bottom.step")
-    for button in button_steps:
-        button[0].save(path + button[1] + ".step")
-    if base is not None and buttons is not None:
-        generate_controller_assembly(
-            base_top=base_top,
-            base_bottom=base_bottom,
-            buttons=buttons,
-            button_steps=button_steps,
-            path=path,
+    if base is not None or buttons is not None:
+        base_top, base_bottom, button_steps = generate_controller(
+            base=base, buttons=buttons
         )
+        cq.exporters.export(base_top, path + "base_top.step")
+        cq.exporters.export(base_bottom, path + "base_bottom.step")
+        for button in button_steps:
+            button[0].save(path + button[1] + ".step")
+        if base is not None and buttons is not None:
+            generate_controller_assembly(
+                base_top=base_top,
+                base_bottom=base_bottom,
+                buttons=buttons,
+                button_steps=button_steps,
+                path=path,
+            )
 
 
 # TODO: Comment
