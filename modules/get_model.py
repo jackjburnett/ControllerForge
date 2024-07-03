@@ -2,6 +2,7 @@ import onnx
 
 
 # TODO: ONNX extension validation
+# TODO: COMMENT
 def get_model(path="parameter_store/ai_models/", onnx_name="trained_model"):
     model = onnx.load(path + onnx_name + ".onnx")
     return model
