@@ -53,10 +53,7 @@ def generate_button_cap(
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
     # If no wall is provided, an empty wall is created
     if wall is None:
-        wall = {
-            "thickness": 0.0,
-            "height": 0.0
-        }
+        wall = {"thickness": 0.0, "height": 0.0}
     # If the walls have a thickness and height above 0, they are generated then added to the assembly
     if wall["thickness"] > 0.0 and wall["height"] > 0.0:
         walls = (
@@ -79,7 +76,6 @@ def generate_base(
     base_length=100,
     wall_thickness=5,
     rounded_edges=False,
-    screws=False,
     screw_radius=1,
     corner_radius=5,
 ):
@@ -126,7 +122,7 @@ def generate_base(
     bottom_base = bottom_base.union(corners)
     # Add the screw holes or slots to the bottom base
     corner_holes = cq.Workplane()
-    if screws:
+    if screw_radius > 0.0:
         corner_hole = (
             cq.Workplane()
             .circle(screw_radius)
@@ -144,7 +140,7 @@ def generate_base(
         .extrude(wall_thickness)
     )
     # Add the screw holes or slots to the top base
-    if screws:
+    if screw_radius > 0.0:
         top_base = top_base.cut(corner_holes.translate((0, 0, -wall_thickness)))
     else:
         top_base = top_base.union(corner_holes.translate((0, 0, 0)))
@@ -164,7 +160,6 @@ def generate_controller(
             base["base_length"],
             base["wall_thickness"],
             base["rounded_edges"],
-            base["screws"],
             base["screw_radius"],
             base["corner_radius"],
         )
@@ -178,10 +173,9 @@ def generate_controller(
                     generate_button_cap(
                         diameter=button_values["diameter"],
                         thickness=button_values["thickness"],
-                        wall_thickness=button_values["wall_thickness"],
-                        wall_height=button_values["wall_height"],
                         bevel=button_values["bevel"],
                         mount_values=button_values["mount"],
+                        wall=button_values["wall"],
                     ),
                     button_name,
                 ]
@@ -191,9 +185,7 @@ def generate_controller(
                     cq.Workplane()
                     .circle((button_values["diameter"] / 2) + 1)
                     .extrude(base["wall_thickness"])
-                    .translate(
-                        (button_values["button_x"], button_values["button_y"], 0)
-                    )
+                    .translate((button_values["x"], button_values["y"], 0))
                 )
                 base_top = base_top.cut(button_hole)
     return base_top, base_bottom, button_steps
@@ -210,8 +202,8 @@ def generate_controller_assembly(
             button_steps[i][0],
             loc=cq.Location(
                 (
-                    button_values["button_x"],
-                    button_values["button_y"],
+                    button_values["x"],
+                    button_values["y"],
                     button_values["mount"]["height"],
                 )
             ),
@@ -243,8 +235,8 @@ def generate_controller_files(path="generated_files/", base=None, buttons=None):
 if __name__ == "__main__":
     buttons = {
         "UP": {
-            "button_x": -10,
-            "button_y": -5,
+            "x": -10,
+            "y": -5,
             "diameter": 24.0,
             "thickness": 2.0,
             "bevel": False,
@@ -261,8 +253,8 @@ if __name__ == "__main__":
             },
         },
         "DOWN": {
-            "button_x": -50,
-            "button_y": 10,
+            "x": -50,
+            "y": 10,
             "diameter": 24.0,
             "thickness": 2.0,
             "bevel": True,
@@ -280,12 +272,11 @@ if __name__ == "__main__":
         },
     }
     base = {
-        "base_height": 25,
-        "base_width": 200,
-        "base_length": 100,
-        "wall_thickness": 2.5,
+        "height": 25,
+        "width": 200,
+        "length": 100,
+        "thickness": 2.5,
         "rounded_edges": True,
-        "screws": True,
         "screw_radius": 1,
         "corner_radius": 5,
     }
