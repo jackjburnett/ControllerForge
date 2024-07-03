@@ -35,7 +35,6 @@ def predict_parameters_call():
     predict_parameters.predict_parameters()
 
 
-# TODO: Implement this
 @app.route("/generate_stl", methods=["POST"])
 def generate_stl_call():
     if request.is_json:
