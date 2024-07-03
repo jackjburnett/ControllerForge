@@ -9,8 +9,7 @@ def generate_button_cap(
     diameter=24.0,
     thickness=2.0,
     bevel=False,
-    wall_thickness=0.0,
-    wall_height=3.0,
+    wall=None,
     mount_values=None,
 ):
     # Sets a default mount, if one has not been passed
@@ -52,13 +51,19 @@ def generate_button_cap(
         )
     # Combine all parts of the button cap into an assembly
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
+    # If no wall is provided, an empty wall is created
+    if wall is None:
+        wall = {
+            "thickness": 0.0,
+            "height": 0.0
+        }
     # If the walls have a thickness and height above 0, they are generated then added to the assembly
-    if wall_thickness > 0.0 and wall_height > 0.0:
+    if wall["thickness"] > 0.0 and wall["height"] > 0.0:
         walls = (
             cq.Workplane()
             .circle(diameter / 2)
-            .circle((diameter / 2) - wall_thickness)
-            .extrude(wall_height)
+            .circle((diameter / 2) - wall["thickness"])
+            .extrude(wall["height"])
         )
         cap.add(walls, loc=cq.Location((0, 0, thickness / 2)))
     # Return the assembled button cap
@@ -236,20 +241,12 @@ def generate_controller_files(path="generated_files/", base=None, buttons=None):
 
 
 if __name__ == "__main__":
-    # Uncomment below four lines to test individual functionalities
-    # generate_button_cap(wall_thickness=1.0).save("test_files/cap.step")
-    # Create an assembly of the full base
-    # base_top, base_bottom = generate_base()
-    # base = (cq.Assembly().add(base_top).add(base_bottom)).save("test_files/base.step")
-
     buttons = {
         "UP": {
             "button_x": -10,
             "button_y": -5,
             "diameter": 24.0,
             "thickness": 2.0,
-            "wall_thickness": 0.0,
-            "wall_height": 3.0,
             "bevel": False,
             "mount": {
                 "type": "MX",
@@ -258,14 +255,16 @@ if __name__ == "__main__":
                 "X_point_width": 4.2,
                 "X_point_length": 1.4,
             },
+            "wall": {
+                "thickness": 1.0,
+                "height": 3.0,
+            },
         },
         "DOWN": {
             "button_x": -50,
             "button_y": 10,
             "diameter": 24.0,
             "thickness": 2.0,
-            "wall_thickness": 1.0,
-            "wall_height": 3.0,
             "bevel": True,
             "mount": {
                 "type": "MX",
@@ -273,6 +272,10 @@ if __name__ == "__main__":
                 "diameter": 6.0,
                 "X_point_width": 4.2,
                 "X_point_length": 1.4,
+            },
+            "wall": {
+                "thickness": 1.0,
+                "height": 3.0,
             },
         },
     }
