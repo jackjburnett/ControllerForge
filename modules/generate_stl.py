@@ -62,6 +62,7 @@ def generate_button_cap(
 
 # TODO: What if base is larger than printer?
 # TODO: Automatically calculate based on buttons?
+# TODO: Comment
 def generate_base(
     base_height=50,
     base_width=200,
@@ -140,6 +141,8 @@ def generate_base(
     return top_base, bottom_base
 
 
+# TODO: Comment
+# TODO: Add printer
 def generate_controller(
     base=None,
     buttons=None,
@@ -186,6 +189,7 @@ def generate_controller(
     return base_top, base_bottom, button_steps
 
 
+# TODO: Comment
 def generate_controller_assembly(
     base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
@@ -206,6 +210,8 @@ def generate_controller_assembly(
     controller_assembly.save(path + "controller.step")
 
 
+# TODO: Comment
+# TODO: Add printer
 def generate_controller_files(path="generated_files/", base=None, buttons=None):
     base_top, base_bottom, button_steps = generate_controller(
         base=base, buttons=buttons
