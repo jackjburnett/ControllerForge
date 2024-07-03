@@ -18,10 +18,10 @@
   "Red": {
     "dimensions": {
       "mount": {
-        "type": "Cherry MX",
+        "type": "MX",
         "height": 4.05,
-        "cross_width": 4.2,
-        "cross_length": 1.4
+        "X_point_width": 4.2,
+        "X_point_length": 1.4
       },
       "box": {}
     },

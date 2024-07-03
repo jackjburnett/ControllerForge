@@ -9,17 +9,20 @@ from utils import pipeline_test, step2stl, zipfiles
 app = Flask(__name__)
 
 
+# TODO: Comment
 @app.route("/")
 def index():
     return "Connected to ControllerForge."
 
 
+# TODO: Comment
 @app.route("/train_model", methods=["GET"])
 def train_model_call():
     train_model.train_model()
-    return "Model Trained"
+    return "Requested Model Training"
 
 
+# TODO: Comment
 @app.route("/get_model", methods=["GET"])
 def get_model_call():
     return send_file(
@@ -35,6 +38,8 @@ def predict_parameters_call():
     predict_parameters.predict_parameters()
 
 
+# TODO: Pass switch or mount specifications
+# TODO: Comment
 @app.route("/generate_stl", methods=["POST"])
 def generate_stl_call():
     if request.is_json:

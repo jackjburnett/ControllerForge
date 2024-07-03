@@ -17,12 +17,14 @@ def pipeline_test():
             "wall_thickness": 0.0,
             "wall_height": 3.0,
             "bevel": False,
-            "mount_height": kailh["Red"]["dimensions"]["mount"]["height"],
-            "mount_cross_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
-            "mount_cross_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
-            "mount_radius": (
-                (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1
-            ),
+            "mount": {
+                "type": kailh["Red"]["dimensions"]["mount"]["type"],
+                "height": kailh["Red"]["dimensions"]["mount"]["height"],
+                "diameter": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
+                + 2,
+                "X_point_width": kailh["Red"]["dimensions"]["mount"]["X_point_width"],
+                "X_point_length": kailh["Red"]["dimensions"]["mount"]["X_point_length"],
+            },
         },
         "DOWN": {
             "button_x": 35,
@@ -32,12 +34,14 @@ def pipeline_test():
             "wall_thickness": 1.0,
             "wall_height": 3.0,
             "bevel": True,
-            "mount_height": kailh["Red"]["dimensions"]["mount"]["height"],
-            "mount_cross_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
-            "mount_cross_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
-            "mount_radius": (
-                (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2) + 1
-            ),
+            "mount": {
+                "type": kailh["Red"]["dimensions"]["mount"]["type"],
+                "height": kailh["Red"]["dimensions"]["mount"]["height"],
+                "diameter": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
+                + 2,
+                "X_point_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
+                "X_point_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
+            },
         },
     }
     base = {

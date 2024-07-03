@@ -20,7 +20,7 @@ def generate_button_cap(
             "height": 4.05,
             "X_point_width": 4.2,
             "X_point_length": 1.4,
-            "diameter": 3.0,
+            "diameter": 6.0,
         }
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
@@ -61,6 +61,7 @@ def generate_button_cap(
 
 
 # TODO: What if base is larger than printer?
+# TODO: Automatically calculate based on buttons?
 def generate_base(
     base_height=50,
     base_width=200,
@@ -162,11 +163,12 @@ def generate_controller(
             button_steps.append(
                 [
                     generate_button_cap(
-                        button_values["diameter"],
-                        button_values["thickness"],
-                        button_values["wall_thickness"],
-                        button_values["wall_height"],
-                        button_values["bevel"],
+                        diameter=button_values["diameter"],
+                        thickness=button_values["thickness"],
+                        wall_thickness=button_values["wall_thickness"],
+                        wall_height=button_values["wall_height"],
+                        bevel=button_values["bevel"],
+                        mount_values=button_values["mount"],
                     ),
                     button_name,
                 ]
@@ -196,7 +198,7 @@ def generate_controller_assembly(
                 (
                     button_values["button_x"],
                     button_values["button_y"],
-                    -button_values["mount_height"],
+                    button_values["mount"]["height"],
                 )
             ),
         )
@@ -238,10 +240,13 @@ if __name__ == "__main__":
             "wall_thickness": 0.0,
             "wall_height": 3.0,
             "bevel": False,
-            "mount_height": 4.0,
-            "mount_radius": 3.0,
-            "mount_X_point_width": 4.2,
-            "mount_X_point_length": 1.4,
+            "mount": {
+                "type": "MX",
+                "height": 4.0,
+                "diameter": 6.0,
+                "X_point_width": 4.2,
+                "X_point_length": 1.4,
+            },
         },
         "DOWN": {
             "button_x": -50,
@@ -251,10 +256,13 @@ if __name__ == "__main__":
             "wall_thickness": 1.0,
             "wall_height": 3.0,
             "bevel": True,
-            "mount_height": 4.0,
-            "mount_radius": 3.0,
-            "mount_X_point_width": 4.2,
-            "mount_X_point_length": 1.4,
+            "mount": {
+                "type": "MX",
+                "height": 4.0,
+                "diameter": 6.0,
+                "X_point_width": 4.2,
+                "X_point_length": 1.4,
+            },
         },
     }
     base = {
