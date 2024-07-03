@@ -54,11 +54,9 @@ def generate_stl_call():
             generate_stl.generate_controller_files(base=base, buttons=buttons)
             if base is not None and buttons is not None:
                 step2stl.step2stl("generated_files/controller.step")
-            zipped_controller = zipfiles.zip_controller_files(
-                base=base, buttons=buttons
-            )
+            zipfiles.zip_controller_files(base=base, buttons=buttons)
             return send_file(
-                zipped_controller,
+                "generated_files/controller_files.zip",
                 download_name="controller_files.zip",
                 mimetype="application/zip",
             )
