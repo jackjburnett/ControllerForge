@@ -70,17 +70,25 @@ def generate_button_cap(
 # TODO: Implement
 # TODO: Comment
 def calculate_base_from_buttons(buttons=None):
-    return 1
+    base = {
+        "height": 25,
+        "width": 50,
+        "length": 100,
+        "thickness": 2.5,
+        "rounded_edges": False,
+        "screw_radius": 0,
+        "corner_radius": 5,
+    }
+    return base
 
 
 # TODO: What if base is larger than printer?
 # TODO: Comment
 def generate_base(
-    base=None,
-    base_height=50,
-    base_width=200,
-    base_length=100,
-    wall_thickness=5,
+    height=50,
+    width=200,
+    length=100,
+    thickness=5,
     rounded_edges=False,
     screw_radius=1,
     corner_radius=5,
@@ -88,40 +96,40 @@ def generate_base(
     # Set corner positions in advance
     positions = [
         (
-            -(base_width / 2 - (wall_thickness + corner_radius)),
-            -(base_length / 2 - (wall_thickness + corner_radius)),
-            wall_thickness,
+            -(width / 2 - (thickness + corner_radius)),
+            -(length / 2 - (thickness + corner_radius)),
+            thickness,
         ),
         (
-            -(base_width / 2 - (wall_thickness + corner_radius)),
-            base_length / 2 - (wall_thickness + corner_radius),
-            wall_thickness,
+            -(width / 2 - (thickness + corner_radius)),
+            length / 2 - (thickness + corner_radius),
+            thickness,
         ),
         (
-            base_width / 2 - (wall_thickness + corner_radius),
-            -(base_length / 2 - (wall_thickness + corner_radius)),
-            wall_thickness,
+            width / 2 - (thickness + corner_radius),
+            -(length / 2 - (thickness + corner_radius)),
+            thickness,
         ),
         (
-            base_width / 2 - (wall_thickness + corner_radius),
-            base_length / 2 - (wall_thickness + corner_radius),
-            wall_thickness,
+            width / 2 - (thickness + corner_radius),
+            length / 2 - (thickness + corner_radius),
+            thickness,
         ),
     ]
 
     # Create bottom of base
-    bottom_base = cq.Workplane().rect(base_width, base_length).extrude(base_height)
+    bottom_base = cq.Workplane().rect(width, length).extrude(height)
     # Add rounded edges to bottom base
     if rounded_edges:
         bottom_base = bottom_base.fillet(1)
     inner_base = (
         cq.Workplane()
-        .rect(base_width - (wall_thickness * 2), base_length - (wall_thickness * 2))
-        .extrude(base_height - wall_thickness)
+        .rect(width - (thickness * 2), length - (thickness * 2))
+        .extrude(height - thickness)
     )
     bottom_base = bottom_base.cut(inner_base)
     # Add corners for screw/plugs to bottom base
-    corner = cq.Workplane().circle(corner_radius).extrude(base_height - wall_thickness)
+    corner = cq.Workplane().circle(corner_radius).extrude(height - thickness)
     corners = cq.Workplane()
     for pos in positions:
         corners = corners.union(corner.translate(pos))
@@ -130,24 +138,22 @@ def generate_base(
     corner_holes = cq.Workplane()
     if screw_radius > 0.0:
         corner_hole = (
-            cq.Workplane()
-            .circle(screw_radius)
-            .extrude(base_height - (wall_thickness * 2))
+            cq.Workplane().circle(screw_radius).extrude(height - (thickness * 2))
         )
     else:
-        corner_hole = cq.Workplane().circle(corner_radius / 2).extrude(wall_thickness)
+        corner_hole = cq.Workplane().circle(corner_radius / 2).extrude(thickness)
     for pos in positions:
         corner_holes = corner_holes.union(corner_hole.translate(pos))
     bottom_base = bottom_base.cut(corner_holes)
     # Create top base
     top_base = (
         cq.Workplane()
-        .rect(base_width - (wall_thickness * 2), base_length - (wall_thickness * 2))
-        .extrude(wall_thickness)
+        .rect(width - (thickness * 2), length - (thickness * 2))
+        .extrude(thickness)
     )
     # Add the screw holes or slots to the top base
     if screw_radius > 0.0:
-        top_base = top_base.cut(corner_holes.translate((0, 0, -wall_thickness)))
+        top_base = top_base.cut(corner_holes.translate((0, 0, -thickness)))
     else:
         top_base = top_base.union(corner_holes.translate((0, 0, 0)))
     return top_base, bottom_base
@@ -161,7 +167,7 @@ def generate_controller(
 ):
     if base is None and buttons is not None:
         base = calculate_base_from_buttons(buttons)
-    base_top, base_bottom = generate_base(base=base)
+    base_top, base_bottom = generate_base()
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
