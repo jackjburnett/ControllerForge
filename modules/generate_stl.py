@@ -6,11 +6,11 @@ import cadquery as cq
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
 def generate_button_cap(
-    diameter=24.0,
-    thickness=2.0,
-    bevel=False,
-    wall=None,
-    mount_values=None,
+        diameter=24.0,
+        thickness=2.0,
+        bevel=False,
+        wall=None,
+        mount_values=None,
 ):
     # Sets a default mount, if one has not been passed
     if mount_values is None:
@@ -85,13 +85,13 @@ def calculate_base_from_buttons(buttons=None):
 # TODO: What if base is larger than printer?
 # TODO: Comment
 def generate_base(
-    height=50,
-    width=200,
-    length=100,
-    thickness=5,
-    rounded_edges=False,
-    screw_radius=1,
-    corner_radius=5,
+        height=50,
+        width=200,
+        length=100,
+        thickness=5,
+        rounded_edges=False,
+        screw_radius=1,
+        corner_radius=5,
 ):
     # Set corner positions in advance
     positions = [
@@ -148,7 +148,7 @@ def generate_base(
     # Create top base
     top_base = (
         cq.Workplane()
-        .rect(width - (thickness * 2), length - (thickness * 2))
+        .rect(width - (thickness * 2) - 0.5, length - (thickness * 2) - 0.5)
         .extrude(thickness)
     )
     # Add the screw holes or slots to the top base
@@ -162,8 +162,8 @@ def generate_base(
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-    base=None,
-    buttons=None,
+        base=None,
+        buttons=None,
 ):
     if base is None and buttons is not None:
         base = calculate_base_from_buttons(buttons)
@@ -196,7 +196,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_assembly(
-    base_top, base_bottom, button_steps, buttons, path="generated_files/"
+        base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0

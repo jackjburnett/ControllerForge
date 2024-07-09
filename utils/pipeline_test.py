@@ -22,8 +22,8 @@ def pipeline_test():
             "mount": {
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
-                "diameter": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
-                + 2,
+                "diameter": (kailh["Red"]["dimensions"]["mount"]["X_point_width"] / 2)
+                            + 1,
                 "X_point_width": kailh["Red"]["dimensions"]["mount"]["X_point_width"],
                 "X_point_length": kailh["Red"]["dimensions"]["mount"]["X_point_length"],
             },
@@ -41,20 +41,19 @@ def pipeline_test():
             "mount": {
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
-                "diameter": (kailh["Red"]["dimensions"]["mount"]["cross_width"] / 2)
-                + 2,
-                "X_point_width": kailh["Red"]["dimensions"]["mount"]["cross_width"],
-                "X_point_length": kailh["Red"]["dimensions"]["mount"]["cross_length"],
+                "diameter": (kailh["Red"]["dimensions"]["mount"]["X_point_width"] / 2)
+                            + 1,
+                "X_point_width": kailh["Red"]["dimensions"]["mount"]["X_point_width"],
+                "X_point_length": kailh["Red"]["dimensions"]["mount"]["X_point_length"],
             },
         },
     }
     base = {
-        "base_height": 50,
-        "base_width": 200,
-        "base_length": 100,
-        "wall_thickness": 5,
+        "height": 25,
+        "width": 200,
+        "length": 100,
+        "thickness": 2.5,
         "rounded_edges": True,
-        "screws": False,
         "screw_radius": 1,
         "corner_radius": 5,
     }
