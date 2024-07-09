@@ -9,7 +9,6 @@ from utils import pipeline_test, step2stl, zipfiles
 app = Flask(__name__)
 
 
-# TODO: Update environment.yml
 # TODO: Comment
 @app.route("/")
 def index():
