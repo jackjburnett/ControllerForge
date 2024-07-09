@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Black">
     <option name="enabledOnSave" value="true" />
+    <option name="pathToExecutable" value="C:\Python312\Scripts\black.exe" />
     <option name="sdkName" value="cadquery" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="cadquery" project-jdk-type="Python SDK" />
