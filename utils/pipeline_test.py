@@ -10,8 +10,8 @@ def pipeline_test():
         kailh = json.load(f)
     buttons = {
         "UP": {
-            "x": -10,
-            "y": -5,
+            "x": 70,
+            "y": 30,
             "diameter": 24.0,
             "thickness": 2.0,
             "bevel": False,
@@ -30,7 +30,7 @@ def pipeline_test():
         },
         "DOWN": {
             "x": 35,
-            "y": 10,
+            "y": 15,
             "diameter": 30.0,
             "thickness": 2.0,
             "bevel": True,
@@ -57,6 +57,7 @@ def pipeline_test():
         "screw_radius": 1,
         "corner_radius": 5,
     }
+
     generate_stl.generate_controller_files(base=base, buttons=buttons)
     step2stl.step2stl("generated_files/controller.step")
     zipfiles.zip_controller_files(base=base, buttons=buttons)

@@ -70,29 +70,57 @@ def generate_button_cap(
 # TODO: Implement
 # TODO: Comment
 def calculate_base_from_buttons(buttons=None):
-    base = {
-        "height": 25,
-        "width": 50,
-        "length": 100,
-        "thickness": 2.5,
-        "rounded_edges": False,
-        "screw_radius": 0,
-        "corner_radius": 5,
-    }
+    if buttons is None:
+        base = {
+            "height": 5,
+            "width": 5,
+            "length": 5,
+            "thickness": 1,
+            "rounded_edges": False,
+            "screw_radius": 0,
+            "corner_radius": 1,
+        }
+    else:
+        max_x = 0
+        max_y = 0
+        for button in buttons.values():
+            if (button["y"] + (button["diameter"] / 2) + 5) > max_y:
+                max_y = button["y"] + (button["diameter"] / 2) + 5
+            if (button["x"] + (button["diameter"] / 2) + 5) > max_x:
+                max_x = button["x"] + (button["diameter"] / 2) + 5
+        base = {
+            "height": 25,
+            "width": max_x,
+            "length": max_y,
+            "thickness": 1,
+            "rounded_edges": True,
+            "screw_radius": 0,
+            "corner_radius": 5,
+        }
     return base
 
 
 # TODO: What if base is larger than printer?
 # TODO: Comment
-def generate_base(
-        height=50,
-        width=200,
-        length=100,
-        thickness=5,
-        rounded_edges=False,
-        screw_radius=1,
-        corner_radius=5,
-):
+def generate_base(base=None):
+    if base is None:
+        base = {
+            "height": 50,
+            "width": 200,
+            "length": 100,
+            "thickness": 5,
+            "rounded_edges": False,
+            "screw_radius": 1,
+            "corner_radius": 5,
+        }
+    # TODO: Use dictionary values instead of assigning variable
+    width = base["width"]
+    height = base["height"]
+    length = base["length"]
+    thickness = base["thickness"]
+    rounded_edges = base["rounded_edges"]
+    corner_radius = base["corner_radius"]
+    screw_radius = base["screw_radius"]
     # Set corner positions in advance
     positions = [
         (
@@ -167,7 +195,7 @@ def generate_controller(
 ):
     if base is None and buttons is not None:
         base = calculate_base_from_buttons(buttons)
-    base_top, base_bottom = generate_base()
+    base_top, base_bottom = generate_base(base)
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
@@ -184,11 +212,19 @@ def generate_controller(
                 ]
             )
             if base is not None:
+                offset_x = base["width"] / 2
+                offset_y = base["length"] / 2
                 button_hole = (
                     cq.Workplane()
                     .circle((button_values["diameter"] / 2) + 1)
                     .extrude(base["thickness"])
-                    .translate((button_values["x"], button_values["y"], 0))
+                    .translate(
+                        (
+                            button_values["x"] - offset_x,
+                            button_values["y"] - offset_y,
+                            0,
+                        )
+                    )
                 )
                 base_top = base_top.cut(button_hole)
     return base_top, base_bottom, button_steps
@@ -200,18 +236,19 @@ def generate_controller_assembly(
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
-    for button_values in buttons.values():
-        controller_assembly.add(
-            button_steps[i][0],
-            loc=cq.Location(
-                (
-                    button_values["x"],
-                    button_values["y"],
-                    button_values["mount"]["height"],
-                )
-            ),
-        )
-        i += 1
+    if buttons is not None:
+        for button_values in buttons.values():
+            controller_assembly.add(
+                button_steps[i][0],
+                loc=cq.Location(
+                    (
+                        button_values["x"] / 2,
+                        button_values["y"] / 2,
+                        -(button_values["mount"]["height"]),
+                    )
+                ),
+            )
+            i += 1
     controller_assembly.save(path + "controller.step")
 
 
@@ -226,22 +263,21 @@ def generate_controller_files(path="generated_files/", base=None, buttons=None):
         cq.exporters.export(base_bottom, path + "base_bottom.step")
         for button in button_steps:
             button[0].save(path + button[1] + ".step")
-        if base is not None and buttons is not None:
-            generate_controller_assembly(
-                base_top=base_top,
-                base_bottom=base_bottom,
-                buttons=buttons,
-                button_steps=button_steps,
-                path=path,
-            )
+        generate_controller_assembly(
+            base_top=base_top,
+            base_bottom=base_bottom,
+            buttons=buttons,
+            button_steps=button_steps,
+            path=path,
+        )
 
 
 # TODO: Comment
 if __name__ == "__main__":
     buttons = {
         "UP": {
-            "x": -10,
-            "y": -5,
+            "x": 20,
+            "y": 15,
             "diameter": 24.0,
             "thickness": 2.0,
             "bevel": False,
@@ -258,8 +294,8 @@ if __name__ == "__main__":
             },
         },
         "DOWN": {
-            "x": -50,
-            "y": 10,
+            "x": 70,
+            "y": 30,
             "diameter": 24.0,
             "thickness": 2.0,
             "bevel": True,
