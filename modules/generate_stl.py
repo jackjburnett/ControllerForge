@@ -90,7 +90,7 @@ def calculate_base_from_buttons(buttons=None):
                 max_x = button["x"] + (button["diameter"] / 2) + 5
         base = {
             "height": 25,
-            "width": (max_x + 5) / 2,
+            "width": max_x + 5,
             "length": max_y + 5,
             "thickness": 2.5,
             "rounded_edges": True,
@@ -217,8 +217,8 @@ def generate_controller(
                 .extrude(base["thickness"])
                 .translate(
                     (
-                        button_values["x"] - offset_x,
-                        button_values["y"] - offset_y,
+                        -(button_values["x"] - offset_x),
+                        (button_values["y"] - offset_y),
                         0,
                     )
                 )
@@ -239,8 +239,8 @@ def generate_controller_assembly(
                 button_steps[i][0],
                 loc=cq.Location(
                     (
-                        button_values["x"] - base["width"] / 2,
-                        button_values["y"] - base["length"] / 2,
+                        -(button_values["x"] - base["width"] / 2),
+                        (button_values["y"] - base["length"] / 2),
                         -(button_values["mount"]["height"]),
                     )
                 ),
