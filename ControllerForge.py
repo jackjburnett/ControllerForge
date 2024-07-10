@@ -65,8 +65,8 @@ def generate_stl_call():
             )
         except Exception as e:
             return jsonify({"error": str(e)}), 400
-        else:
-            return jsonify({"error": "Request does not contain JSON data"}), 400
+    else:
+        return jsonify({"error": "Request does not contain JSON data"}), 400
 
 
 # TODO: Implement this
