@@ -1,15 +1,12 @@
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
-def zip_controller_files(base=None, buttons=None, path="generated_files/"):
-    files = []
-    if base is not None:
-        files.append(path + "base_top.step")
-        files.append(path + "base_bottom.step")
+def zip_controller_files(buttons=None, path="generated_files/"):
+    files = [path + "base_top.step", path + "base_bottom.step"]
     if buttons is not None:
         for button in buttons.keys():
             files.append(path + button + ".step")
-    if buttons is not None and base is not None:
+    if buttons is not None:
         files.append(path + "controller.stl")
     # Create a ZipFile object
     with ZipFile(path + "controller_files.zip", "w", ZIP_DEFLATED) as zipf:

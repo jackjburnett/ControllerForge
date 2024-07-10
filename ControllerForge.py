@@ -57,7 +57,7 @@ def generate_stl_call():
 
             generate_stl.generate_controller_files(base=base, buttons=buttons)
             step2stl.step2stl("generated_files/controller.step")
-            zipfiles.zip_controller_files(base=base, buttons=buttons)
+            zipfiles.zip_controller_files(buttons=buttons)
             return send_file(
                 "generated_files/controller_files.zip",
                 download_name="controller_files.zip",
