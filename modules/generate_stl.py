@@ -5,6 +5,7 @@ import cadquery as cq
 # the function produces a default button cap if no values are passed to it
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
+# TODO: Add convex and concave buttons
 def generate_button_cap(
         diameter=24.0,
         thickness=2.0,
