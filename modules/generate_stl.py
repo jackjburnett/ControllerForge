@@ -2,6 +2,10 @@ import cadquery as cq
 
 
 # TODO: Generate keycaps using json file
+def generate_key_cap():
+    pass
+
+
 # generate_button_cap is a function for generating button caps
 # the function produces a default button cap if no values are passed to it
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
