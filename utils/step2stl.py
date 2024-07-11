@@ -1,6 +1,7 @@
 import cadquery as cq
 
 
+# TODO: Move to generate_stl
 def step2stl(filename):
     if filename.lower().endswith(".stl"):
         return 1
