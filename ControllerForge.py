@@ -2,7 +2,7 @@ import argparse
 
 from flask import Flask, send_file, request, jsonify
 
-from modules import train_model, predict_parameters, generate_stl
+from modules import train_model, predict_parameters, generate_step
 from parameter_store import default_values
 from utils import pipeline_test, step2stl, zipfiles
 
@@ -39,9 +39,10 @@ def predict_parameters_call():
 
 
 # TODO: Pass switch or mount specifications
+# TODO: Separate STL to generate_stl,
 # TODO: Comment
-@app.route("/generate_stl", methods=["POST"])
-def generate_stl_call():
+@app.route("/generate_step", methods=["POST"])
+def generate_step_call():
     if request.is_json:
         try:
             # Parse the JSON data from the request
@@ -55,8 +56,7 @@ def generate_stl_call():
             else:
                 base = None
 
-            generate_stl.generate_controller_files(base=base, buttons=buttons)
-            step2stl.step2stl("generated_files/controller.step")
+            generate_step.generate_controller_files(base=base, buttons=buttons)
             zipfiles.zip_controller_files(buttons=buttons)
             return send_file(
                 "generated_files/controller_files.zip",
@@ -67,6 +67,14 @@ def generate_stl_call():
             return jsonify({"error": str(e)}), 400
     else:
         return jsonify({"error": "Request does not contain JSON data"}), 400
+
+
+# TODO: Implement this
+# https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
+@app.route("/generate_stl", methods=["POST"])
+def generate_stl_call():
+    step2stl.step2stl("generated_files/controller.step")
+    pass
 
 
 # TODO: Implement this

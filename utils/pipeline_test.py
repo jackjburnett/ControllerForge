@@ -1,6 +1,6 @@
 import json
 
-from modules import generate_stl, get_model, train_model
+from modules import generate_step, get_model, train_model
 from utils import step2stl, zipfiles
 
 
