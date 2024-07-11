@@ -1,17 +1,18 @@
 import cadquery as cq
 
 
+# TODO: Generate keycaps using json file
 # generate_button_cap is a function for generating button caps
 # the function produces a default button cap if no values are passed to it
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
 # TODO: Add convex and concave buttons
 def generate_button_cap(
-    diameter=24.0,
-    thickness=2.0,
-    bevel=False,
-    wall=None,
-    mount_values=None,
+        diameter=24.0,
+        thickness=2.0,
+        bevel=False,
+        wall=None,
+        mount_values=None,
 ):
     # Sets a default mount, if one has not been passed
     if mount_values is None:
@@ -191,8 +192,8 @@ def generate_base(base=None):
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-    base=None,
-    buttons=None,
+        base=None,
+        buttons=None,
 ):
     base_top, base_bottom = generate_base(base)
     button_steps = []
@@ -230,7 +231,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_assembly(
-    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
+        base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
