@@ -1,6 +1,13 @@
 import cadquery as cq
 
 
+# TODO: Generate mount ipynb
+# TODO: Generate key ipynb
+# TODO: Generate button ipynb
+# TODO: Generate mount ipynb
+# TODO: Add 'modular' option to base
+# TODO: Generate ModularBase ipynb
+# TODO: Create GenerateModularBase
 # TODO: Implement this
 def generate_mount(mount_values=None):
     # Sets a default mount, if one has not been passed
@@ -38,7 +45,7 @@ def generate_mount(mount_values=None):
     return mount
 
 
-# TODO: Generate keycaps using json file
+# TODO: Generate key caps using json file
 def generate_key_cap(mount_values=None):
     pass
 
@@ -112,6 +119,7 @@ def calculate_base_from_buttons(buttons=None):
     return base
 
 
+# TODO: Convert to generate_simple_base
 # TODO: What if base is larger than printer?
 # TODO: Comment
 def generate_base(base=None):
