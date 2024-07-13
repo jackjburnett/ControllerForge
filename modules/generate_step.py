@@ -2,17 +2,18 @@ import cadquery as cq
 
 
 # TODO: Generate key ipynb
-# TODO: Generate AddText ipynb
 # TODO: Implement generate key
-# TODO: Implement add text
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
 # TODO: Create GenerateModularBase
 
 
+# Function to generate text for button caps and key caps
 def add_text(text=None, font="Arial"):
+    # If no text has been passed, an empty Workplane is returned
     if text is None:
         return cq.Workplane()
+    # If text is passed, it will generate text for the cap
     else:
         return cq.Workplane().text(
             text["content"],
