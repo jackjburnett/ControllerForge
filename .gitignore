@@ -1,5 +1,6 @@
 # Generated files
 /generated_files/*
+/notebooks/skidl_logs/*
 
 # Modules testing
 modules/test_files/*
