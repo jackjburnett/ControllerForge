@@ -2,18 +2,33 @@ import cadquery as cq
 
 
 # TODO: Generate key ipynb
-# TODO: Generate mount ipynb
+# TODO: Generate AddText ipynb
+# TODO: Implement generate key
+# TODO: Implement add text
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
 # TODO: Create GenerateModularBase
-# TODO: Implement this
+
+
+def add_text(text=None, font="Arial"):
+    if text is None:
+        return cq.Workplane()
+    else:
+        return cq.Workplane().text(
+            text["content"],
+            text["size"],
+            distance=-(text["depth"]),
+            font=font,
+            halign="center",
+            valign="center",
+        )
 
 
 # Function used to generate the mounts for key caps and button caps
 def generate_mount(mount_values=None):
     # If no mount values are passed, mount_values is instantiated to prevent errors
     if mount_values is None:
-        mount_values["type"] == ""
+        mount_values = {"type": "", "diameter": 0}
     # Create the mount based on the mount type
     if mount_values["type"].upper() == "MX":
         # MX mounts generate the mount's X-Point using the width and length of the X_point
@@ -329,6 +344,11 @@ if __name__ == "__main__":
             "wall": {
                 "thickness": 1.0,
                 "height": 3.0,
+            },
+            "text": {
+                "context": "A",
+                "size": 12,
+                "depth": 1,
             },
         },
     }
