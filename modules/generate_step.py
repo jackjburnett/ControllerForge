@@ -1,7 +1,9 @@
 import cadquery as cq
 
 
+# TODO: Add USB-C ipynb
 # TODO: Generate key ipynb
+# TODO: Implement add Usb-c
 # TODO: Implement generate key
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
