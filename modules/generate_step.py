@@ -1,22 +1,19 @@
 import cadquery as cq
 
 
-# TODO: Generate mount ipynb
 # TODO: Generate key ipynb
-# TODO: Generate button ipynb
 # TODO: Generate mount ipynb
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
 # TODO: Create GenerateModularBase
 # TODO: Implement this
+
+
+# Function used to generate the mounts for key caps and button caps
 def generate_mount(mount_values=None):
-    # Sets a default mount, if one has not been passed
+    # If no mount values are passed, mount_values is instantiated to prevent errors
     if mount_values is None:
-        mount_values = {
-            "type": "STEM",
-            "height": 1,
-            "diameter": 1,
-        }
+        mount_values["type"] == ""
     # Create the mount based on the mount type
     if mount_values["type"].upper() == "MX":
         # MX mounts generate the mount's X-Point using the width and length of the X_point
@@ -35,11 +32,16 @@ def generate_mount(mount_values=None):
             .cut(mount_X_point)
         )
     elif mount_values["type"].upper() == "STEM":
+        # Stem creates a solid mount for the key
         mount = (
             cq.Workplane()
             .circle(mount_values["diameter"] / 2)
             .extrude(mount_values["height"])
         )
+    else:
+        # raise ValueError("Mount most have a specified type")
+        # If there is no mount, an empty Workplane is returned
+        mount = cq.Workplane()
     return mount
 
 
