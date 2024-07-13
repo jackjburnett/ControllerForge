@@ -106,6 +106,12 @@ def generate_button_cap(
 
 # TODO: Implement
 # TODO: Comment
+def add_usb_c():
+    pass
+
+
+# TODO: Implement
+# TODO: Comment
 def calculate_base_from_buttons(buttons=None):
     if buttons is None:
         base = {
