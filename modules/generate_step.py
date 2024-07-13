@@ -13,14 +13,12 @@ def generate_mount(mount_values=None):
     # Sets a default mount, if one has not been passed
     if mount_values is None:
         mount_values = {
-            "type": "",
+            "type": "STEM",
             "height": 1,
-            "X_point_width": 0,
-            "X_point_length": 0,
             "diameter": 1,
         }
     # Create the mount based on the mount type
-    if mount_values["type"] == "MX":
+    if mount_values["type"].upper() == "MX":
         # MX mounts generate the mount's X-Point using the width and length of the X_point
         # the current implementation assumes uniformity of the X_point's arms
         mount_X_point = (
@@ -36,7 +34,7 @@ def generate_mount(mount_values=None):
             .extrude(mount_values["height"])
             .cut(mount_X_point)
         )
-    else:
+    elif mount_values["type"].upper() == "STEM":
         mount = (
             cq.Workplane()
             .circle(mount_values["diameter"] / 2)
