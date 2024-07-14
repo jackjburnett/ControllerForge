@@ -18,16 +18,21 @@ def generate_text(text=None):
         )
 
 
-# TODO: Comment
-# TODO: Have offset
-def add_text(plane=cq.Workplane(), text=None, x_offset=0, y_offset=0):
+# Function to add text to a plane, taking a plane, the text, and offsets
+def add_text(plane=None, text=None, x_offset=0, y_offset=0):
+    # If a plane is not passed, None is returned
     if plane is not None:
+        # If there is a plane, text is added to it
         if text is not None:
+            # Text is generated using generate_text, then translated using the offsets
             text_workplane = generate_text(text).translate((x_offset, y_offset))
+            # If the text is more than 0 depth, it is cut out of the plane
             if text["depth"] > 0:
                 plane = plane.cut(text_workplane)
+            # If the text has a negative depth, it is added to the plane
             elif text["depth"] < 0:
                 plane = plane.add(text_workplane)
+            # A depth of 0 results in the text not being put on the plane
     return plane
 
 
@@ -86,7 +91,7 @@ def generate_key_cap(thickness=2.0, mount_values=None, text=None):
 # TODO: Add convex and concave buttons
 # TODO: Add comments
 def generate_button_cap(
-    diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
+        diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
@@ -250,9 +255,9 @@ def generate_base(base=None):
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-    base=None,
-    buttons=None,
-    keys=None,
+        base=None,
+        buttons=None,
+        keys=None,
 ):
     base_top, base_bottom = generate_base(base)
     button_steps = []
@@ -293,7 +298,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_assembly(
-    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
+        base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
