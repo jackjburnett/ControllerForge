@@ -20,10 +20,10 @@ def generate_text(text=None):
 
 # TODO: Comment
 # TODO: Have offset
-def add_text(plane=cq.Workplane(), text=None):
+def add_text(plane=cq.Workplane(), text=None, x_offset=0, y_offset=0):
     if plane is not None:
         if text is not None:
-            text_workplane = generate_text(text)
+            text_workplane = generate_text(text).translate((x_offset, y_offset))
             if text["depth"] > 0:
                 plane = plane.cut(text_workplane)
             elif text["depth"] < 0:
@@ -71,7 +71,9 @@ def generate_mount(mount_values=None):
 # TODO: Generate key caps using json file
 def generate_key_cap(thickness=2.0, mount_values=None, text=None):
     top = cq.Workplane()
-    top = add_text(plane=top, text=text)
+    top = add_text(
+        plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
+    )
     mount = generate_mount(mount_values)
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
     return cap
@@ -82,6 +84,7 @@ def generate_key_cap(thickness=2.0, mount_values=None, text=None):
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
 # TODO: Add convex and concave buttons
+# TODO: Add comments
 def generate_button_cap(
         diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
@@ -90,7 +93,9 @@ def generate_button_cap(
     # Add bevel to the button, if it has been requested
     if bevel:
         top = top.edges().fillet(0.99)
-    top = add_text(plane=top, text=text)
+    top = add_text(
+        plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
+    )
     mount = generate_mount(mount_values)
     # Combine all parts of the button cap into an assembly
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
@@ -370,7 +375,14 @@ if __name__ == "__main__":
                 "thickness": 1.0,
                 "height": 3.0,
             },
-            "text": {"content": "A", "size": 12, "depth": -1, "font": "Arial"},
+            "text": {
+                "content": "A",
+                "size": 12,
+                "depth": -1,
+                "font": "Arial",
+                "x": 5,
+                "y": 5,
+            },
         },
     }
     base = {
