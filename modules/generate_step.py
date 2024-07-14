@@ -122,10 +122,20 @@ def generate_button_cap(
     return cap
 
 
-# TODO: Add USB-C ipynb
+# Function that generates a USB_C receptacle port cutout using a height, width, corner radius, and wall thickness
+def generate_usb_c(height=4, width=11, corner_radius=1, wall_thickness=2):
+    return (
+        cq.Workplane()
+        .rect(width, height)
+        .extrude(wall_thickness)
+        .edges("|Z")
+        .fillet(corner_radius)
+    )
+
+
 # TODO: Implement
 # TODO: Comment
-def add_usb_c():
+def add_usb_c(usb_c=None, x_offset=0, y_offset=0):
     pass
 
 
