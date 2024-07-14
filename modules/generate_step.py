@@ -92,7 +92,7 @@ def generate_key_cap(thickness=2.0, mount_values=None, text=None):
 # TODO: Add convex and concave buttons
 # TODO: Add comments
 def generate_button_cap(
-        diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
+    diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
@@ -266,9 +266,9 @@ def generate_base(base=None):
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-        base=None,
-        buttons=None,
-        keys=None,
+    base=None,
+    buttons=None,
+    keys=None,
 ):
     base_top, base_bottom = generate_base(base)
     button_steps = []
@@ -309,7 +309,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_assembly(
-        base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
+    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
