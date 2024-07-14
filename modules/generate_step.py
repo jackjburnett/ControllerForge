@@ -2,7 +2,7 @@ import cadquery as cq
 
 
 # Function to generate text for button caps and key caps
-def add_text(text=None):
+def generate_text(text=None):
     # If no text has been passed, an empty Workplane is returned
     if text is None:
         return cq.Workplane()
@@ -16,6 +16,18 @@ def add_text(text=None):
             halign="center",
             valign="center",
         )
+
+
+# TODO: Comment
+def add_text(plane=cq.Workplane(), text=None):
+    if plane is not None:
+        if text is not None:
+            text_workplane = generate_text(text)
+            if text["depth"] > 0:
+                plane = plane.cut(text_workplane)
+            elif text["depth"] < 0:
+                plane = plane.add(text_workplane)
+    return plane
 
 
 # Function used to generate the mounts for key caps and button caps
@@ -56,8 +68,12 @@ def generate_mount(mount_values=None):
 
 # TODO: Generate key ipynb
 # TODO: Generate key caps using json file
-def generate_key_cap(mount_values=None):
-    pass
+def generate_key_cap(thickness=2.0, mount_values=None, text=None):
+    top = cq.Workplane()
+    top = add_text(plane=top, text=text)
+    mount = generate_mount(mount_values)
+    cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
+    return cap
 
 
 # generate_button_cap is a function for generating button caps
@@ -73,12 +89,7 @@ def generate_button_cap(
     # Add bevel to the button, if it has been requested
     if bevel:
         top = top.edges().fillet(0.99)
-    if text is not None:
-        text_workplane = add_text(text)
-        if text["depth"] > 0:
-            top = top.cut(text_workplane)
-        elif text["depth"] < 0:
-            top = top.add(text_workplane)
+    top = add_text(plane=top, text=text)
     mount = generate_mount(mount_values)
     # Combine all parts of the button cap into an assembly
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
@@ -339,6 +350,7 @@ if __name__ == "__main__":
                 "thickness": 1.0,
                 "height": 3.0,
             },
+            "text": {"content": "↑", "size": 12, "depth": 1, "font": "Arial"},
         },
         "DOWN": {
             "x": 70,
