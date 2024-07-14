@@ -79,6 +79,7 @@ def generate_key_cap(thickness=2.0, mount_values=None, text=None):
     top = add_text(
         plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
     )
+    hat = 2
     mount = generate_mount(mount_values)
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
     return cap
@@ -98,6 +99,7 @@ def generate_button_cap(
     # Add bevel to the button, if it has been requested
     if bevel:
         top = top.edges().fillet(0.99)
+    # text is added to the top of the button, if text is none this will just return the top
     top = add_text(
         plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
     )
@@ -116,7 +118,6 @@ def generate_button_cap(
             .extrude(wall["height"])
         )
         cap.add(walls, loc=cq.Location((0, 0, thickness / 2)))
-
     # Return the assembled button cap
     return cap
 
