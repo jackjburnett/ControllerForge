@@ -19,6 +19,7 @@ def generate_text(text=None):
 
 
 # TODO: Comment
+# TODO: Have offset
 def add_text(plane=cq.Workplane(), text=None):
     if plane is not None:
         if text is not None:
