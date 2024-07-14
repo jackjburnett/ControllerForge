@@ -1,17 +1,8 @@
 import cadquery as cq
 
 
-# TODO: Add USB-C ipynb
-# TODO: Generate key ipynb
-# TODO: Implement add Usb-c
-# TODO: Implement generate key
-# TODO: Add 'modular' option to base
-# TODO: Generate ModularBase ipynb
-# TODO: Create GenerateModularBase
-
-
 # Function to generate text for button caps and key caps
-def add_text(text=None, font="Arial"):
+def add_text(text=None):
     # If no text has been passed, an empty Workplane is returned
     if text is None:
         return cq.Workplane()
@@ -20,8 +11,8 @@ def add_text(text=None, font="Arial"):
         return cq.Workplane().text(
             text["content"],
             text["size"],
-            distance=-(text["depth"]),
-            font=font,
+            distance=text["depth"],
+            font=text["font"],
             halign="center",
             valign="center",
         )
@@ -36,7 +27,7 @@ def generate_mount(mount_values=None):
     if mount_values["type"].upper() == "MX":
         # MX mounts generate the mount's X-Point using the width and length of the X_point
         # the current implementation assumes uniformity of the X_point's arms
-        mount_X_point = (
+        mount_x_point = (
             cq.Workplane()
             .rect(mount_values["X_point_width"], mount_values["X_point_length"])
             .rect(mount_values["X_point_length"], mount_values["X_point_width"])
@@ -47,7 +38,7 @@ def generate_mount(mount_values=None):
             cq.Workplane()
             .circle(mount_values["diameter"] / 2)
             .extrude(mount_values["height"])
-            .cut(mount_X_point)
+            .cut(mount_x_point)
         )
     elif mount_values["type"].upper() == "STEM":
         # Stem creates a solid mount for the key
@@ -63,6 +54,7 @@ def generate_mount(mount_values=None):
     return mount
 
 
+# TODO: Generate key ipynb
 # TODO: Generate key caps using json file
 def generate_key_cap(mount_values=None):
     pass
@@ -74,17 +66,19 @@ def generate_key_cap(mount_values=None):
 # the default mount is the Cherry MX clone found on Kailh Red switches
 # TODO: Add convex and concave buttons
 def generate_button_cap(
-    diameter=24.0,
-    thickness=2.0,
-    bevel=False,
-    wall=None,
-    mount_values=None,
+        diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
     # Add bevel to the button, if it has been requested
     if bevel:
         top = top.edges().fillet(0.99)
+    if text is not None:
+        text_workplane = add_text(text)
+        if text["depth"] > 0:
+            top = top.cut(text_workplane)
+        elif text["depth"] < 0:
+            top = top.add(text_workplane)
     mount = generate_mount(mount_values)
     # Combine all parts of the button cap into an assembly
     cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
@@ -100,10 +94,12 @@ def generate_button_cap(
             .extrude(wall["height"])
         )
         cap.add(walls, loc=cq.Location((0, 0, thickness / 2)))
+
     # Return the assembled button cap
     return cap
 
 
+# TODO: Add USB-C ipynb
 # TODO: Implement
 # TODO: Comment
 def add_usb_c():
@@ -146,6 +142,9 @@ def calculate_base_from_buttons(buttons=None):
 # TODO: Convert to generate_simple_base
 # TODO: What if base is larger than printer?
 # TODO: Comment
+# TODO: Add 'modular' option to base
+# TODO: Generate ModularBase ipynb
+# TODO: Create GenerateModularBase
 def generate_base(base=None):
     if base is None:
         base = {
@@ -234,8 +233,9 @@ def generate_base(base=None):
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-    base=None,
-    buttons=None,
+        base=None,
+        buttons=None,
+        keys=None,
 ):
     base_top, base_bottom = generate_base(base)
     button_steps = []
@@ -244,11 +244,12 @@ def generate_controller(
             button_steps.append(
                 [
                     generate_button_cap(
-                        diameter=button_values["diameter"],
-                        thickness=button_values["thickness"],
-                        bevel=button_values["bevel"],
-                        mount_values=button_values["mount"],
-                        wall=button_values["wall"],
+                        diameter=button_values.get("diameter", 24.0),
+                        thickness=button_values.get("thickness", 2.0),
+                        bevel=button_values.get("bevel", False),
+                        mount_values=button_values.get("mount", None),
+                        wall=button_values.get("wall", None),
+                        text=button_values.get("text", None),
                     ),
                     button_name,
                 ]
@@ -268,12 +269,14 @@ def generate_controller(
                 )
             )
             base_top = base_top.cut(button_hole)
+        if keys is not None:
+            pass
     return base_top, base_bottom, button_steps
 
 
 # TODO: Comment
 def generate_controller_assembly(
-    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
+        base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
@@ -354,11 +357,7 @@ if __name__ == "__main__":
                 "thickness": 1.0,
                 "height": 3.0,
             },
-            "text": {
-                "context": "A",
-                "size": 12,
-                "depth": 1,
-            },
+            "text": {"content": "A", "size": 12, "depth": -1, "font": "Arial"},
         },
     }
     base = {
