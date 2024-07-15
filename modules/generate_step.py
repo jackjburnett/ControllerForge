@@ -81,7 +81,7 @@ def generate_mount(mount_values=None):
         )
     else:
         # raise ValueError("Mount most have a specified type")
-        # If there is no mount, an empty Workplane is returned
+        # If there is no mount, an empty workplane is returned
         mount = cq.Workplane()
     return mount
 
@@ -94,10 +94,6 @@ def generate_key_cap(
     top_length = units["top"] * dimensions["length"]
     base_width = units["base"] * dimensions["width"]
     base_length = units["base"] * dimensions["length"]
-    # Create the top part of the keycap
-    top_part = (
-        cq.Workplane("XY").rect(top_width, top_length).extrude(dimensions["thickness"])
-    )
     # Create the base profile and loft to the top profile
     keycap_body = (
         cq.Workplane("XY")
@@ -194,20 +190,41 @@ def generate_button_cap(
 
 
 # Function that generates a USB_C receptacle port cutout using a height, width, corner radius, and wall thickness
-def generate_usb_c(height=4, width=11, corner_radius=1, wall_thickness=2):
+def generate_usb_c(usb_c=None):
+    if usb_c is None:
+        usb_c = {"height": 4, "width": 11, "corner_radius": 1, "wall_thickness": 2}
     return (
         cq.Workplane()
-        .rect(width, height)
-        .extrude(wall_thickness)
+        .rect(usb_c["width"], usb_c["height"])
+        .extrude(usb_c["wall_thickness"])
         .edges("|Z")
-        .fillet(corner_radius)
+        .fillet(usb_c["corner_radius"])
     )
 
 
-# TODO: Implement
 # TODO: Comment
-def add_usb_c(usb_c=None, x_offset=0, y_offset=0):
-    pass
+def add_usb_c(
+    plane=None,
+    usb_c=None,
+    x_offset=0,
+    x_rotate=0,
+    y_offset=0,
+    y_rotate=0,
+    z_offset=0,
+    z_rotate=0,
+):
+    if plane is not None:
+        # If there is a plane, text is added to it
+        if usb_c is not None:
+            # Text is generated using generate_text, then translated using the offsets accounting for depth
+            plane = plane.cut(
+                generate_usb_c(usb_c)
+                .translate((x_offset, y_offset, z_offset))
+                .rotate((0, 0, 0), (1, 0, 0), x_rotate)
+                .rotate((0, 0, 0), (0, 1, 0), y_rotate)
+                .rotate((0, 0, 0), (0, 0, 1), z_rotate)
+            )
+    return plane
 
 
 # TODO: Implement
@@ -245,7 +262,6 @@ def calculate_base_from_buttons(buttons=None):
 
 
 # TODO: Convert to generate_simple_base
-# TODO: What if base is larger than printer?
 # TODO: Comment
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
