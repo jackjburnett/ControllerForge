@@ -74,8 +74,6 @@ def generate_mount(mount_values=None):
     return mount
 
 
-# TODO: Generate key caps using json file
-# TODO: REWORK TO BE BUILT CORRECTLY
 def generate_key_cap(
         units=None, dimensions=None, bevel=False, mount_values=None, text=None
 ):
@@ -91,22 +89,22 @@ def generate_key_cap(
     # Create the base profile and loft to the top profile
     keycap_body = (
         cq.Workplane("XY")
-        .rect(top_width, top_length)
-        .workplane(offset=dimensions["height"])
         .rect(base_width, base_length)
+        .workplane(offset=dimensions["wall_height"] + dimensions["thickness"])
+        .rect(top_width, top_length)
         .loft(combine=True)
     )
     # Create the inner hollow part
     inner_keycap = (
         cq.Workplane("XY")
         .rect(
-            (top_width - (dimensions["thickness"] * 2)) * dimensions["width"],
-            (top_length - (dimensions["thickness"] * 2)) * dimensions["length"],
-        )
-        .workplane(offset=dimensions["height"])
-        .rect(
             (units["base"] - (dimensions["thickness"] * 2)) * dimensions["width"],
             (units["base"] - (dimensions["thickness"] * 2)) * dimensions["length"],
+        )
+        .workplane(offset=dimensions["wall_height"])
+        .rect(
+            (top_width - (dimensions["thickness"] * 2)) * dimensions["width"],
+            (top_length - (dimensions["thickness"] * 2)) * dimensions["length"],
         )
         .loft(combine=True)
     )
@@ -115,14 +113,13 @@ def generate_key_cap(
     # Add rounded corners if requested
     if bevel:
         keycap = keycap.edges().fillet(0.5)
-    # Combine the sides and the keycap top
-    keycap = top_part.union(keycap)
     # Add text to the keycap
     keycap = add_text(
         plane=keycap,
         text=text,
         x_offset=text.get("x", 0),
         y_offset=text.get("y", 0),
+        z_offset=dimensions["thickness"] + dimensions["wall_height"],
     )
     # Generate the mount
     mount = generate_mount(mount_values)
@@ -130,7 +127,10 @@ def generate_key_cap(
     cap = (
         cq.Assembly()
         .add(keycap)
-        .add(mount, loc=cq.Location((0, 0, dimensions["thickness"])))
+        .add(
+            mount,
+            loc=cq.Location((0, 0, dimensions["wall_height"] - mount_values["height"])),
+        )
     )
     # Return the cap
     return cap
@@ -174,7 +174,9 @@ def generate_button_cap(
     # Generate the mount for the button
     mount = generate_mount(mount_values)
     # Combine all parts of the button cap
-    cap = cap.add(mount, loc=cq.Location((0, 0, wall["height"] - (thickness * 2))))
+    cap = cap.add(
+        mount, loc=cq.Location((0, 0, wall["height"] - mount_values["height"]))
+    )
     # Return the assembled button cap
     return cap
 
@@ -197,6 +199,7 @@ def add_usb_c(usb_c=None, x_offset=0, y_offset=0):
 
 
 # TODO: Implement
+# TODO: Complete Rework
 # TODO: Comment
 def calculate_base_from_buttons(buttons=None):
     if buttons is None:
@@ -506,7 +509,7 @@ if __name__ == "__main__":
                 "X_point_length": 1.4,
             },
             "units": {"top": 15, "base": 20},
-            "dimensions": {"width": 1, "length": 1, "height": 15, "thickness": 2},
+            "dimensions": {"width": 1, "length": 1, "wall_height": 10, "thickness": 2},
             "text": {
                 "content": "A",
                 "size": 12,
@@ -528,7 +531,7 @@ if __name__ == "__main__":
                 "X_point_length": 1.4,
             },
             "units": {"top": 20, "base": 25},
-            "dimensions": {"width": 1, "length": 1, "height": 15, "thickness": 2},
+            "dimensions": {"width": 1, "length": 1, "wall_height": 5, "thickness": 2},
             "text": {
                 "content": "B",
                 "size": 12,
