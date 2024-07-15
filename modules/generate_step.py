@@ -19,13 +19,15 @@ def generate_text(text=None):
 
 
 # Function to add text to a plane, taking a plane, the text, and offsets
-def add_text(plane=None, text=None, x_offset=0, y_offset=0):
+def add_text(plane=None, text=None, x_offset=0.0, y_offset=0.0, z_offset=0.0):
     # If a plane is not passed, None is returned
     if plane is not None:
         # If there is a plane, text is added to it
         if text is not None:
             # Text is generated using generate_text, then translated using the offsets
-            text_workplane = generate_text(text).translate((x_offset, y_offset))
+            text_workplane = generate_text(text).translate(
+                (x_offset, y_offset, z_offset)
+            )
             # If the text is more than 0 depth, it is cut out of the plane
             if text["depth"] > 0:
                 plane = plane.cut(text_workplane)
@@ -78,7 +80,6 @@ def generate_key_cap(
         units=None, dimensions=None, bevel=False, mount_values=None, text=None
 ):
     # Parameters derived from the dictionaries values
-    top_difference = units["base"] - units["top"]
     top_width = units["top"] * dimensions["width"]
     top_length = units["top"] * dimensions["length"]
     base_width = units["base"] * dimensions["width"]
@@ -149,26 +150,34 @@ def generate_button_cap(
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
     # Add bevel to the button, if it has been requested
     if bevel:
-        top = top.edges().fillet(0.99)
+        top = top.faces(">Z").edges().fillet(1)
     # text is added to the top of the button, if text is none this will just return the top
     top = add_text(
-        plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
+        plane=top,
+        text=text,
+        x_offset=text.get("x", 0),
+        y_offset=text.get("y", 0),
+        z_offset=thickness,
     )
-    mount = generate_mount(mount_values)
-    # Combine all parts of the button cap into an assembly
-    cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
+    # Convert the button cap into an assembly
+    cap = cq.Assembly().add(top, loc=cq.Location((0, 0, wall["height"])))
     # If no wall is provided, an empty wall is created
     if wall is None:
         wall = {"thickness": 0.0, "height": 0.0}
     # If the walls have a thickness and height above 0, they are generated then added to the assembly
+    # The walls add half the thickness, as the 'height' is the wall size after the button cap starts
     if wall["thickness"] > 0.0 and wall["height"] > 0.0:
         walls = (
             cq.Workplane()
             .circle(diameter / 2)
             .circle((diameter / 2) - wall["thickness"])
-            .extrude(wall["height"])
+            .extrude(wall["height"] + (thickness / 2))
         )
-        cap.add(walls, loc=cq.Location((0, 0, thickness / 2)))
+        cap.add(walls)
+    # Generate the mount for the button
+    mount = generate_mount(mount_values)
+    # Combine all parts of the button cap
+    cap = cap.add(mount, loc=cq.Location((0, 0, thickness)))
     # Return the assembled button cap
     return cap
 
