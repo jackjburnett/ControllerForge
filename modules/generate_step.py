@@ -38,6 +38,18 @@ def add_text(plane=None, text=None, x_offset=0.0, y_offset=0.0, z_offset=0.0):
     return plane
 
 
+# TODO: Implement
+# TODO: Comment
+def generate_curve():
+    pass
+
+
+# TODO: Implement
+# TODO: Comment
+def add_curve():
+    pass
+
+
 # Function used to generate the mounts for key caps and button caps
 def generate_mount(mount_values=None):
     # If no mount values are passed, mount_values is instantiated to prevent errors
