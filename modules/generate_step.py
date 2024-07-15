@@ -202,7 +202,6 @@ def generate_usb_c(usb_c=None):
     )
 
 
-# TODO: Comment
 def add_usb_c(
     plane=None,
     usb_c=None,
@@ -213,10 +212,11 @@ def add_usb_c(
     z_offset=0,
     z_rotate=0,
 ):
+    # If there is no plane, then none is returned
     if plane is not None:
-        # If there is a plane, text is added to it
+        # If there is a plane, a port for the usb-c is cut out of it
         if usb_c is not None:
-            # Text is generated using generate_text, then translated using the offsets accounting for depth
+            # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
             plane = plane.cut(
                 generate_usb_c(usb_c)
                 .translate((x_offset, y_offset, z_offset))
