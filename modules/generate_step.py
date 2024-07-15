@@ -24,9 +24,9 @@ def add_text(plane=None, text=None, x_offset=0.0, y_offset=0.0, z_offset=0.0):
     if plane is not None:
         # If there is a plane, text is added to it
         if text is not None:
-            # Text is generated using generate_text, then translated using the offsets
+            # Text is generated using generate_text, then translated using the offsets accounting for depth
             text_workplane = generate_text(text).translate(
-                (x_offset, y_offset, z_offset)
+                (x_offset, y_offset, z_offset - text["depth"])
             )
             # If the text is more than 0 depth, it is cut out of the plane
             if text["depth"] > 0:
@@ -140,9 +140,6 @@ def generate_key_cap(
 # the function produces a default button cap if no values are passed to it
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
-# TODO: Add convex and concave buttons
-# TODO: Add comments
-# TODO: REWORK TO BE BUILT CORRECTLY
 def generate_button_cap(
         diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
@@ -177,7 +174,7 @@ def generate_button_cap(
     # Generate the mount for the button
     mount = generate_mount(mount_values)
     # Combine all parts of the button cap
-    cap = cap.add(mount, loc=cq.Location((0, 0, thickness)))
+    cap = cap.add(mount, loc=cq.Location((0, 0, wall["height"] - (thickness * 2))))
     # Return the assembled button cap
     return cap
 
@@ -418,7 +415,7 @@ if __name__ == "__main__":
         "UP": {
             "x": 20,
             "y": 15,
-            "diameter": 24.0,
+            "diameter": 30.0,
             "thickness": 2.0,
             "bevel": False,
             "mount": {
@@ -432,7 +429,7 @@ if __name__ == "__main__":
                 "thickness": 1.0,
                 "height": 3.0,
             },
-            "text": {"content": "↑", "size": 12, "depth": 1, "font": "Arial"},
+            "text": {"content": "UP", "size": 12, "depth": 1, "font": "Arial"},
         },
         "DOWN": {
             "x": 70,
@@ -449,10 +446,36 @@ if __name__ == "__main__":
             },
             "wall": {
                 "thickness": 1.0,
-                "height": 3.0,
+                "height": 2.0,
             },
             "text": {
                 "content": "down",
+                "size": 12,
+                "depth": -1,
+                "font": "Arial",
+                "x": 0,
+                "y": 0,
+            },
+        },
+        "LEFT": {
+            "x": 60,
+            "y": 20,
+            "diameter": 24.0,
+            "thickness": 2.0,
+            "bevel": True,
+            "mount": {
+                "type": "MX",
+                "height": 4.0,
+                "diameter": 6.0,
+                "X_point_width": 4.2,
+                "X_point_length": 1.4,
+            },
+            "wall": {
+                "thickness": 0.0,
+                "height": 0.0,
+            },
+            "text": {
+                "content": "LeFt",
                 "size": 12,
                 "depth": -1,
                 "font": "Arial",
