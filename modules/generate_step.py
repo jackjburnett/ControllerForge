@@ -183,11 +183,22 @@ def generate_key_cap(
     return cap
 
 
-# TODO: Implement
-# TODO: Comment
-def add_key_cap():
-    # return plane and key cap
-    pass
+# Function for adding a hole for a key to a plane, using offsets
+def add_key_hole(
+    plane=None, thickness=0, width=0, length=0, x_offset=0.0, y_offset=0.0, z_offset=0.0
+):
+    # If a plane is not passed, None is returned
+    if plane is not None:
+        # If there is a plane, and a diameter is defined, the hole is cut using the parameters
+        if width != 0 and length != 0:
+            key_hole = (
+                cq.Workplane()
+                .rect(width, length)
+                .extrude(thickness)
+                .translate((x_offset, y_offset, z_offset))
+            )
+            plane = plane.cut(key_hole)
+    return plane
 
 
 # generate_button_cap is a function for generating button caps
@@ -235,12 +246,22 @@ def generate_button_cap(
     return cap
 
 
-# TODO: Implement
-# TODO: Comment
-# TODO: Move code from generate_controller to here
-def add_button_cap():
-    # return plane and button cap
-    pass
+# Function for adding a hole for a button to a plane, using offsets
+def add_button_hole(
+    plane=None, diameter=0, thickness=0, x_offset=0.0, y_offset=0.0, z_offset=0.0
+):
+    # If a plane is not passed, None is returned
+    if plane is not None:
+        # If there is a plane, and a diameter is defined, the hole is cut using the parameters
+        if diameter != 0:
+            button_hole = (
+                cq.Workplane()
+                .circle(diameter / 2)
+                .extrude(thickness)
+                .translate((x_offset, y_offset, z_offset))
+            )
+            plane = plane.cut(button_hole)
+    return plane
 
 
 # TODO: Implement
@@ -368,19 +389,7 @@ def generate_controller(
             )
             offset_x = base["width"] / 2
             offset_y = base["length"] / 2
-            button_hole = (
-                cq.Workplane()
-                .circle((button_values["diameter"] / 2) + 1)
-                .extrude(base["thickness"])
-                .translate(
-                    (
-                        -(button_values["x"] - offset_x),
-                        (button_values["y"] - offset_y),
-                        0,
-                    )
-                )
-            )
-            base_top = base_top.cut(button_hole)
+
     return base_top, base_bottom, button_steps, []
 
 
