@@ -144,6 +144,12 @@ def generate_key_cap(
     return cap
 
 
+# TODO: Implement
+# TODO: Comment
+def add_key_cap():
+    pass
+
+
 # generate_button_cap is a function for generating button caps
 # the function produces a default button cap if no values are passed to it
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
@@ -189,6 +195,12 @@ def generate_button_cap(
     return cap
 
 
+# TODO: Implement
+# TODO: Comment
+def add_button_cap():
+    pass
+
+
 # Function that generates a USB_C receptacle port cutout using a height, width, corner radius, and wall thickness
 def generate_usb_c(usb_c=None):
     if usb_c is None:
@@ -228,37 +240,9 @@ def add_usb_c(
 
 
 # TODO: Implement
-# TODO: Complete Rework
 # TODO: Comment
-def calculate_base_from_buttons(buttons=None):
-    if buttons is None:
-        base = {
-            "height": 5,
-            "width": 5,
-            "length": 5,
-            "thickness": 1,
-            "rounded_edges": False,
-            "screw_radius": 0,
-            "corner_radius": 1,
-        }
-    else:
-        max_x = 0
-        max_y = 0
-        for button in buttons.values():
-            if (button["y"] + (button["diameter"] / 2) + 5) > max_y:
-                max_y = button["y"] + (button["diameter"] / 2) + 5
-            if (button["x"] + (button["diameter"] / 2) + 5) > max_x:
-                max_x = button["x"] + (button["diameter"] / 2) + 5
-        base = {
-            "height": 25,
-            "width": max_x + 5,
-            "length": max_y + 5,
-            "thickness": 2.5,
-            "rounded_edges": True,
-            "screw_radius": 0,
-            "corner_radius": 5,
-        }
-    return base
+def calculate_base_from_buttons():
+    pass
 
 
 # TODO: Convert to generate_simple_base
@@ -266,7 +250,7 @@ def calculate_base_from_buttons(buttons=None):
 # TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
 # TODO: Create GenerateModularBase
-def generate_base(base=None):
+def generate_simple_base(base=None):
     if base is None:
         base = {
             "height": 50,
@@ -358,7 +342,8 @@ def generate_controller(
     buttons=None,
     keys=None,
 ):
-    base_top, base_bottom = generate_base(base)
+    key_steps = keys
+    base_top, base_bottom = generate_simple_base(base)
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
@@ -390,59 +375,30 @@ def generate_controller(
                 )
             )
             base_top = base_top.cut(button_hole)
-        if keys is not None:
-            pass
-    return base_top, base_bottom, button_steps
-
-
-# TODO: Comment
-def generate_controller_assembly(
-    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
-):
-    controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
-    i = 0
-    if buttons is not None:
-        for button_values in buttons.values():
-            controller_assembly.add(
-                button_steps[i][0],
-                loc=cq.Location(
-                    (
-                        -(button_values["x"] - base["width"] / 2),
-                        (button_values["y"] - base["length"] / 2),
-                        -(button_values["mount"]["height"]),
-                    )
-                ),
-            )
-            i += 1
-    controller_assembly.save(path + "controller.step")
+    return base_top, base_bottom, button_steps, []
 
 
 # TODO: Comment
 # TODO: Add printer
-def generate_controller_files(path="generated_files/", base=None, buttons=None):
-    if base is None and buttons is not None:
-        base = calculate_base_from_buttons(buttons)
-    if base is not None or buttons is not None:
-        base_top, base_bottom, button_steps = generate_controller(
-            base=base, buttons=buttons
-        )
-        cq.exporters.export(base_top, path + "base_top.step")
-        cq.exporters.export(base_bottom, path + "base_bottom.step")
-        for button in button_steps:
-            button[0].save(path + button[1] + ".step")
-        generate_controller_assembly(
-            base=base,
-            base_top=base_top,
-            base_bottom=base_bottom,
-            buttons=buttons,
-            button_steps=button_steps,
-            path=path,
-        )
+def generate_controller_files(
+    path="generated_files/", base=None, buttons=None, keys=None
+):
+    if base is None:
+        calculate_base_from_buttons()
+    base_top, base_bottom, button_steps, key_steps = generate_controller(
+        base=base, buttons=buttons, keys=keys
+    )
+    cq.exporters.export(base_top, path + "base_top.step")
+    cq.exporters.export(base_bottom, path + "base_bottom.step")
+    for button in button_steps:
+        button[0].save(path + button[1] + ".step")
+    for key in key_steps:
+        key[0].save(path + key[1] + ".step")
 
 
 # TODO: Comment
 if __name__ == "__main__":
-    buttons = {
+    buttons_dict = {
         "UP": {
             "x": 20,
             "y": 15,
@@ -515,7 +471,7 @@ if __name__ == "__main__":
             },
         },
     }
-    base = {
+    base_dict = {
         "height": 25,
         "width": 200,
         "length": 100,
@@ -524,7 +480,7 @@ if __name__ == "__main__":
         "screw_radius": 1,
         "corner_radius": 5,
     }
-    keys = {
+    keys_dict = {
         "A": {
             "x": 70,
             "y": 30,
@@ -570,19 +526,6 @@ if __name__ == "__main__":
             },
         },
     }
-    generate_controller_files(path="test_files/", base=base, buttons=buttons)
-    path = "test_files/"
-    generate_key_cap(
-        units=keys["A"]["units"],
-        dimensions=keys["A"]["dimensions"],
-        bevel=keys["A"]["bevel"],
-        mount_values=keys["A"]["mount"],
-        text=keys["A"]["text"],
-    ).save(path + "A.step")
-    generate_key_cap(
-        units=keys["B"]["units"],
-        dimensions=keys["B"]["dimensions"],
-        bevel=keys["B"]["bevel"],
-        mount_values=keys["B"]["mount"],
-        text=keys["B"]["text"],
-    ).save(path + "B.step")
+    generate_controller_files(
+        path="test_files/", base=base_dict, buttons=buttons_dict, keys=keys_dict
+    )
