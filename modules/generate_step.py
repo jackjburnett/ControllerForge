@@ -287,8 +287,8 @@ def generate_simple_base(base=None):
             "corner_radius": 5,
         }
     # TODO: Use dictionary values instead of assigning variable
-    width = base["width"]
     height = base["height"]
+    width = base["width"]
     length = base["length"]
     thickness = base["thickness"]
     rounded_edges = base["rounded_edges"]
