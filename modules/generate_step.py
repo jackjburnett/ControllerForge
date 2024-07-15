@@ -1,6 +1,45 @@
 import cadquery as cq
 
 
+# Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
+def generate_usb_c(usb_c=None):
+    if usb_c is None:
+        usb_c = {"height": 4, "width": 11, "corner_radius": 1, "wall_thickness": 2}
+    return (
+        cq.Workplane()
+        .rect(usb_c["width"], usb_c["height"])
+        .extrude(usb_c["wall_thickness"])
+        .edges("|Z")
+        .fillet(usb_c["corner_radius"])
+    )
+
+
+# Function the cuts a USB-C receptacle port from a plane
+def add_usb_c(
+    plane=None,
+    usb_c=None,
+    x_offset=0,
+    x_rotate=0,
+    y_offset=0,
+    y_rotate=0,
+    z_offset=0,
+    z_rotate=0,
+):
+    # If there is no plane, then none is returned
+    if plane is not None:
+        # If there is a plane, a port for the usb-c is cut out of it
+        if usb_c is not None:
+            # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
+            plane = plane.cut(
+                generate_usb_c(usb_c)
+                .translate((x_offset, y_offset, z_offset))
+                .rotate((0, 0, 0), (1, 0, 0), x_rotate)
+                .rotate((0, 0, 0), (0, 1, 0), y_rotate)
+                .rotate((0, 0, 0), (0, 0, 1), z_rotate)
+            )
+    return plane
+
+
 # Function to generate text for button caps and key caps
 def generate_text(text=None):
     # If no text has been passed, an empty Workplane is returned
@@ -147,6 +186,7 @@ def generate_key_cap(
 # TODO: Implement
 # TODO: Comment
 def add_key_cap():
+    # return plane and key cap
     pass
 
 
@@ -197,46 +237,10 @@ def generate_button_cap(
 
 # TODO: Implement
 # TODO: Comment
+# TODO: Move code from generate_controller to here
 def add_button_cap():
+    # return plane and button cap
     pass
-
-
-# Function that generates a USB_C receptacle port cutout using a height, width, corner radius, and wall thickness
-def generate_usb_c(usb_c=None):
-    if usb_c is None:
-        usb_c = {"height": 4, "width": 11, "corner_radius": 1, "wall_thickness": 2}
-    return (
-        cq.Workplane()
-        .rect(usb_c["width"], usb_c["height"])
-        .extrude(usb_c["wall_thickness"])
-        .edges("|Z")
-        .fillet(usb_c["corner_radius"])
-    )
-
-
-def add_usb_c(
-    plane=None,
-    usb_c=None,
-    x_offset=0,
-    x_rotate=0,
-    y_offset=0,
-    y_rotate=0,
-    z_offset=0,
-    z_rotate=0,
-):
-    # If there is no plane, then none is returned
-    if plane is not None:
-        # If there is a plane, a port for the usb-c is cut out of it
-        if usb_c is not None:
-            # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
-            plane = plane.cut(
-                generate_usb_c(usb_c)
-                .translate((x_offset, y_offset, z_offset))
-                .rotate((0, 0, 0), (1, 0, 0), x_rotate)
-                .rotate((0, 0, 0), (0, 1, 0), y_rotate)
-                .rotate((0, 0, 0), (0, 0, 1), z_rotate)
-            )
-    return plane
 
 
 # TODO: Implement
@@ -342,6 +346,8 @@ def generate_controller(
     buttons=None,
     keys=None,
 ):
+    if base.get("modular", False):
+        pass
     key_steps = keys
     base_top, base_bottom = generate_simple_base(base)
     button_steps = []
