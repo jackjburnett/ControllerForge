@@ -72,16 +72,65 @@ def generate_mount(mount_values=None):
     return mount
 
 
-# TODO: Generate key ipynb
 # TODO: Generate key caps using json file
-def generate_key_cap(thickness=2.0, mount_values=None, text=None):
-    top = cq.Workplane()
-    top = add_text(
-        plane=top, text=text, x_offset=-(text.get("x", 0)), y_offset=text.get("y", 0)
+def generate_key_cap(
+        units=None, dimensions=None, bevel=False, mount_values=None, text=None
+):
+    # Parameters derived from the dictionaries values
+    top_difference = units["base"] - units["top"]
+    top_width = units["top"] * dimensions["width"]
+    top_length = units["top"] * dimensions["length"]
+    base_width = units["base"] * dimensions["width"]
+    base_length = units["base"] * dimensions["length"]
+    # Create the top part of the keycap
+    top_part = (
+        cq.Workplane("XY").rect(top_width, top_length).extrude(dimensions["thickness"])
     )
-    hat = 2
+    # Create the base profile and loft to the top profile
+    keycap_body = (
+        cq.Workplane("XY")
+        .rect(top_width, top_length)
+        .workplane(offset=dimensions["height"])
+        .rect(base_width, base_length)
+        .loft(combine=True)
+    )
+    # Create the inner hollow part
+    inner_keycap = (
+        cq.Workplane("XY")
+        .rect(
+            (top_width - (dimensions["thickness"] * 2)) * dimensions["width"],
+            (top_length - (dimensions["thickness"] * 2)) * dimensions["length"],
+        )
+        .workplane(offset=dimensions["height"])
+        .rect(
+            (units["base"] - (dimensions["thickness"] * 2)) * dimensions["width"],
+            (units["base"] - (dimensions["thickness"] * 2)) * dimensions["length"],
+        )
+        .loft(combine=True)
+    )
+    # Cut out the inner keycap to create the hollow
+    keycap = keycap_body.cut(inner_keycap)
+    # Add rounded corners if requested
+    if bevel:
+        keycap = keycap.edges().fillet(0.5)
+    # Combine the sides and the keycap top
+    keycap = top_part.union(keycap)
+    # Add text to the keycap
+    keycap = add_text(
+        plane=keycap,
+        text=text,
+        x_offset=text.get("x", 0),
+        y_offset=text.get("y", 0),
+    )
+    # Generate the mount
     mount = generate_mount(mount_values)
-    cap = cq.Assembly().add(top).add(mount, loc=cq.Location((0, 0, thickness)))
+    # Create the cap assembly
+    cap = (
+        cq.Assembly()
+        .add(keycap)
+        .add(mount, loc=cq.Location((0, 0, dimensions["thickness"])))
+    )
+    # Return the cap
     return cap
 
 
@@ -92,7 +141,7 @@ def generate_key_cap(thickness=2.0, mount_values=None, text=None):
 # TODO: Add convex and concave buttons
 # TODO: Add comments
 def generate_button_cap(
-    diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
+        diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
@@ -266,9 +315,9 @@ def generate_base(base=None):
 # TODO: Comment
 # TODO: Add printer
 def generate_controller(
-    base=None,
-    buttons=None,
-    keys=None,
+        base=None,
+        buttons=None,
+        keys=None,
 ):
     base_top, base_bottom = generate_base(base)
     button_steps = []
@@ -309,7 +358,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_assembly(
-    base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
+        base, base_top, base_bottom, button_steps, buttons, path="generated_files/"
 ):
     controller_assembly = cq.Assembly().add(base_top).add(base_bottom)
     i = 0
@@ -392,12 +441,12 @@ if __name__ == "__main__":
                 "height": 3.0,
             },
             "text": {
-                "content": "A",
+                "content": "down",
                 "size": 12,
                 "depth": -1,
                 "font": "Arial",
-                "x": 5,
-                "y": 5,
+                "x": 0,
+                "y": 0,
             },
         },
     }
@@ -410,4 +459,65 @@ if __name__ == "__main__":
         "screw_radius": 1,
         "corner_radius": 5,
     }
+    keys = {
+        "A": {
+            "x": 70,
+            "y": 30,
+            "bevel": True,
+            "mount": {
+                "type": "MX",
+                "height": 4.0,
+                "diameter": 6.0,
+                "X_point_width": 4.2,
+                "X_point_length": 1.4,
+            },
+            "units": {"top": 15, "base": 20},
+            "dimensions": {"width": 1, "length": 1, "height": 15, "thickness": 2},
+            "text": {
+                "content": "A",
+                "size": 12,
+                "depth": -1,
+                "font": "Arial",
+                "x": 1,
+                "y": 1,
+            },
+        },
+        "B": {
+            "x": 40,
+            "y": 20,
+            "bevel": False,
+            "mount": {
+                "type": "MX",
+                "height": 4.0,
+                "diameter": 6.0,
+                "X_point_width": 4.2,
+                "X_point_length": 1.4,
+            },
+            "units": {"top": 20, "base": 25},
+            "dimensions": {"width": 1, "length": 1, "height": 15, "thickness": 2},
+            "text": {
+                "content": "B",
+                "size": 12,
+                "depth": 1,
+                "font": "Arial",
+                "x": -1,
+                "y": -1,
+            },
+        },
+    }
     generate_controller_files(path="test_files/", base=base, buttons=buttons)
+    path = "test_files/"
+    generate_key_cap(
+        units=keys["A"]["units"],
+        dimensions=keys["A"]["dimensions"],
+        bevel=keys["A"]["bevel"],
+        mount_values=keys["A"]["mount"],
+        text=keys["A"]["text"],
+    ).save(path + "A.step")
+    generate_key_cap(
+        units=keys["B"]["units"],
+        dimensions=keys["B"]["dimensions"],
+        bevel=keys["B"]["bevel"],
+        mount_values=keys["B"]["mount"],
+        text=keys["B"]["text"],
+    ).save(path + "B.step")
