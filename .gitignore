@@ -6,6 +6,9 @@
 # Modules testing
 modules/test_files/*
 
+# Third-party modules
+modules/third-party/opk/*
+
 # CadQuery testing
 utils/test_results/result.dxf
 utils/test_results/result.step
