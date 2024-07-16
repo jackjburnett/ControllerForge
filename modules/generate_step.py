@@ -278,12 +278,16 @@ def calculate_base_from_buttons():
     pass
 
 
-# TODO: Convert to generate_simple_base
 # TODO: Comment
-# TODO: Add 'modular' option to base
-# TODO: Generate ModularBase ipynb
-# TODO: Create GenerateModularBase
-def generate_simple_base(base=None):
+# TODO: Update from ipynb
+# TODO: Add cut buttons
+# TODO: Add cut keys
+# TODO: Add text
+def generate_simple_base(
+    base=None,
+    buttons=None,
+    keys=None,
+):
     if base is None:
         base = {
             "height": 50,
@@ -368,8 +372,16 @@ def generate_simple_base(base=None):
     return top_base, bottom_base
 
 
+# TODO: Add 'modular' option to base
+# TODO: Generate ModularBase ipynb
 # TODO: Comment
-# TODO: Add printer
+# TODO: Implement
+def generate_modular_base(base=None):
+    pass
+
+
+# TODO: Comment
+# TODO: Rework
 def generate_controller(
     base=None,
     buttons=None,
@@ -378,7 +390,7 @@ def generate_controller(
     if base.get("modular", False):
         pass
     key_steps = keys
-    base_top, base_bottom = generate_simple_base(base)
+    base_top, base_bottom = generate_simple_base(base, buttons, keys)
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
@@ -402,7 +414,7 @@ def generate_controller(
 
 
 # TODO: Comment
-# TODO: Add printer
+# TODO: Rework
 def generate_controller_files(
     path="generated_files/", base=None, buttons=None, keys=None
 ):
