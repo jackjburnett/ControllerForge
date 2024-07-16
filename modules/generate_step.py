@@ -185,7 +185,14 @@ def generate_key_cap(
 
 # Function for adding a hole for a key to a plane, using offsets
 def add_key_hole(
-    plane=None, thickness=0, width=0, length=0, x_offset=0.0, y_offset=0.0, z_offset=0.0
+    plane=None,
+    thickness=0,
+    width=0,
+    length=0,
+    x_offset=0.0,
+    y_offset=0.0,
+    z_offset=0.0,
+    rotation=0,
 ):
     # If a plane is not passed, None is returned
     if plane is not None:
@@ -195,6 +202,7 @@ def add_key_hole(
                 cq.Workplane()
                 .rect(width, length)
                 .extrude(thickness)
+                .rotate((0, 0, 0), (0, 0, 1), rotation)
                 .translate((x_offset, y_offset, z_offset))
             )
             plane = plane.cut(key_hole)
@@ -521,6 +529,7 @@ if __name__ == "__main__":
         "B": {
             "x": 40,
             "y": 20,
+            "rotation": 45,
             "bevel": False,
             "mount": {
                 "type": "MX",
