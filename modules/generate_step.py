@@ -278,11 +278,7 @@ def calculate_base_from_buttons():
     pass
 
 
-# TODO: Comment
-# TODO: Update from ipynb
-# TODO: Add cut buttons
-# TODO: Add cut keys
-# TODO: Add text
+# TODO: Potential rewrite
 def generate_simple_base(
         base=None,
         buttons=None,
@@ -316,14 +312,14 @@ def generate_simple_base(
         (0, -(base["length"] / 2 - base["thickness"])),
         (0, base["length"] / 2 - base["thickness"]),
     ]
-
-    # Create bottom of base
+    # Create top base
+    top_base = (
+        cq.Workplane().rect(base["width"], base["length"]).extrude(base["thickness"])
+    )
+    # Generate bottom of base
     bottom_base = (
         cq.Workplane().rect(base["width"], base["length"]).extrude(base["height"])
     )
-    # Add rounded edges to bottom base
-    if rounded_edges:
-        bottom_base = bottom_base.fillet(1)
     inner_base = (
         cq.Workplane()
         .rect(
@@ -332,46 +328,85 @@ def generate_simple_base(
         )
         .extrude(base["height"] - base["thickness"])
     )
-    bottom_base = bottom_base.cut(inner_base)
-    # Add corners for screw/plugs to bottom base
+    bottom_base = bottom_base.cut(inner_base.translate((0, 0, base["thickness"])))
+    # Add rounded edges
+    if base["bevel"]:
+        bottom_base = bottom_base.fillet((base["thickness"] / 2) - 0.01)
+    # Cut the top from the bottom, to result in a flat plane
+    bottom_base = bottom_base.cut(
+        top_base.translate((0, 0, base["height"] - base["thickness"]))
+    )
+    # Add rounded edges
+    if base["bevel"]:
+        top_base = top_base.faces(">Z").edges().fillet(base["thickness"] / 2)
+    # Add corners for screw/plugs
+    corner_radius = base["thickness"]
     corner = (
         cq.Workplane()
-        .circle(base["thickness"])
-        .extrude(base["height"] - base["thickness"])
+        .circle(corner_radius)
+        .extrude(base["height"] - (base["thickness"] * 2))
     )
     corners = cq.Workplane()
     for pos in positions:
-        corners = corners.union(corner.translate(pos))
+        corners = corners.union(
+            corner.translate(pos).translate((0, 0, base["thickness"]))
+        )
     bottom_base = bottom_base.union(corners)
-    # Add the screw holes or slots to the bottom base
+    # Add the screw holes or slots
     corner_holes = cq.Workplane()
-    if screw_radius > 0.0:
+    screw_holes = cq.Workplane()
+    if (base["screw_diameter"] / 2) > 0.0:
         corner_hole = (
-            cq.Workplane()
-            .circle(screw_radius)
-            .extrude(base["height"] - (base["thickness"] * 2))
+            cq.Workplane().circle(corner_radius / 2).extrude(base["thickness"] / 2)
+        )
+        screw_hole = (
+            cq.Workplane().circle((base["screw_diameter"] / 2)).extrude(base["height"])
         )
     else:
         corner_hole = (
-            cq.Workplane().circle(base["thickness"] / 2).extrude(base["thickness"])
+            cq.Workplane().circle(corner_radius / 2).extrude(base["thickness"])
         )
+        screw_hole = cq.Workplane()
     for pos in positions:
         corner_holes = corner_holes.union(corner_hole.translate(pos))
-    bottom_base = bottom_base.cut(corner_holes)
-    # Create top base
-    top_base = (
-        cq.Workplane()
-        .rect(
-            base["width"] - (base["thickness"] * 2) - 0.5,
-            base["length"] - (base["thickness"] * 2) - 0.5,
-        )
-        .extrude(base["thickness"])
+        screw_holes = screw_holes.union(screw_hole.translate(pos))
+    bottom_base = bottom_base.union(
+        corner_holes.translate((0, 0, base["height"] - base["thickness"]))
     )
-    # Add the screw holes or slots to the top base
-    if screw_radius > 0.0:
-        top_base = top_base.cut(corner_holes.translate((0, 0, -base["thickness"])))
-    else:
-        top_base = top_base.union(corner_holes.translate((0, 0, 0)))
+    if (base["screw_diameter"] / 2) > 0.0:
+        bottom_base = bottom_base.cut(screw_holes.translate((0, 0, base["thickness"])))
+    # Add the screw holes or slots
+    top_base = top_base.cut(corner_holes)
+    if (base["screw_diameter"] / 2) > 0.0:
+        top_base = top_base.cut(screw_holes)
+    if buttons is not None:
+        for button in buttons:
+            top_base = add_button_hole(
+                plane=top_base,
+                diameter=button["diameter"] + 2,
+                thickness=base["thickness"],
+                x_offset=button["x"],
+                y_offset=button["y"],
+            )
+    if keys is not None:
+        for key in keys:
+            top_base = add_key_hole(
+                plane=top_base,
+                width=(key["units"]["base"] * key["dimensions"]["width"]) + 2,
+                length=(key["units"]["base"] * key["dimensions"]["length"]) + 2,
+                thickness=base["thickness"],
+                x_offset=key["x"],
+                y_offset=key["y"],
+                rotation=key["rotation"],
+            )
+    if base.get("text", None) is not None:
+        top_base = add_text(
+            plane=top_base,
+            text=base["text"],
+            x_offset=base["text"].get("x", 0),
+            y_offset=base["text"].get("y", 0),
+            z_offset=base["thickness"],
+        )
     return top_base, bottom_base
 
 
@@ -392,7 +427,7 @@ def generate_controller(
 ):
     if base.get("modular", False):
         pass
-    key_steps = keys
+    key_steps = []
     base_top, base_bottom = generate_simple_base(base, buttons, keys)
     button_steps = []
     if buttons is not None:
@@ -515,7 +550,15 @@ if __name__ == "__main__":
         "length": 100,
         "thickness": 2.5,
         "bevel": True,
-        "screw_dimaeter": 3,
+        "screw_diameter": 3,
+        "text": {
+            "content": "Base",
+            "size": 12,
+            "depth": 1,
+            "font": "Arial",
+            "x": 30,
+            "y": 6,
+        },
     }
     keys_dict = {
         "A": {
