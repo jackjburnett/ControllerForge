@@ -4,6 +4,8 @@ import json
 
 # TODO: generate_screen_hole
 # TODO: add screen hole
+# TODO: generate_settings buttons
+# TODO: Add settings buttons
 
 
 # Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
