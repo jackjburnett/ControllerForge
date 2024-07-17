@@ -5,6 +5,7 @@
 
 # Modules testing
 modules/test_files/*
+!modules/test_files/_test.json
 
 # Third-party modules
 modules/third-party/opk/*
