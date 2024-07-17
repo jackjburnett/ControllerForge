@@ -95,12 +95,109 @@
         "depth": 1,
         "font": "Arial"
       }
+    },
+    "RB": {
+      "x": 167,
+      "y": 102,
+      "diameter": 20.0,
+      "thickness": 2.0,
+      "bevel": true,
+      "mount": {
+        "type": "MX",
+        "height": 4.0,
+        "diameter": 6.0,
+        "X_point_width": 4.2,
+        "X_point_length": 1.4
+      },
+      "wall": {
+        "thickness": 1.0,
+        "height": 1.0
+      },
+      "text": {
+        "content": "RB",
+        "size": 12,
+        "depth": 1,
+        "font": "Arial"
+      }
+    },
+    "LB": {
+      "x": 195,
+      "y": 101,
+      "diameter": 20.0,
+      "thickness": 2.0,
+      "bevel": true,
+      "mount": {
+        "type": "MX",
+        "height": 4.0,
+        "diameter": 6.0,
+        "X_point_width": 4.2,
+        "X_point_length": 1.4
+      },
+      "wall": {
+        "thickness": 1.0,
+        "height": 1.0
+      },
+      "text": {
+        "content": "LB",
+        "size": 12,
+        "depth": 1,
+        "font": "Arial"
+      }
+    },
+    "RT": {
+      "x": 161,
+      "y": 69,
+      "diameter": 20.0,
+      "thickness": 2.0,
+      "bevel": true,
+      "mount": {
+        "type": "MX",
+        "height": 4.0,
+        "diameter": 6.0,
+        "X_point_width": 4.2,
+        "X_point_length": 1.4
+      },
+      "wall": {
+        "thickness": 1.0,
+        "height": 1.0
+      },
+      "text": {
+        "content": "RT",
+        "size": 12,
+        "depth": 1,
+        "font": "Arial"
+      }
+    },
+    "LT": {
+      "x": 190,
+      "y": 69,
+      "diameter": 20.0,
+      "thickness": 2.0,
+      "bevel": true,
+      "mount": {
+        "type": "MX",
+        "height": 4.0,
+        "diameter": 6.0,
+        "X_point_width": 4.2,
+        "X_point_length": 1.4
+      },
+      "wall": {
+        "thickness": 1.0,
+        "height": 1.0
+      },
+      "text": {
+        "content": "LT",
+        "size": 12,
+        "depth": 1,
+        "font": "Arial"
+      }
     }
   },
   "keys": {
     "UP": {
-      "x": 22,
+      "x": 51.5,
       "y": 80,
+      "rotation": -20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -122,15 +219,16 @@
       "text": {
         "content": "↑",
         "size": 10,
-        "depth": -1,
+        "depth": -0.5,
         "font": "Arial",
         "x": 0,
         "y": 0
       }
     },
-    "left": {
+    "LEFT": {
       "x": 22,
-      "y": 60,
+      "y": 68,
+      "rotation": -20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -152,15 +250,16 @@
       "text": {
         "content": "←",
         "size": 10,
-        "depth": -1,
+        "depth": -0.5,
         "font": "Arial",
         "x": 0,
         "y": 0
       }
     },
-    "down": {
+    "DOWN": {
       "x": 44,
       "y": 60,
+      "rotation": -20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -182,15 +281,16 @@
       "text": {
         "content": "↓",
         "size": 10,
-        "depth": -1,
+        "depth": -0.5,
         "font": "Arial",
         "x": 0,
         "y": 0
       }
     },
-    "right": {
+    "RIGHT": {
       "x": 66,
-      "y": 60,
+      "y": 52,
+      "rotation": -20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -212,7 +312,7 @@
       "text": {
         "content": "→",
         "size": 10,
-        "depth": -1,
+        "depth": -0.5,
         "font": "Arial",
         "x": 0,
         "y": 0
@@ -220,12 +320,12 @@
     }
   },
   "base": {
-    "height": 10,
+    "height": 50,
     "width": 215,
-    "length": 130,
+    "length": 120,
     "thickness": 4,
     "bevel": true,
-    "screw_diameter": 3,
+    "screw_diameter": 1,
     "text": {
       "content": "ControllerForge",
       "size": 6,
