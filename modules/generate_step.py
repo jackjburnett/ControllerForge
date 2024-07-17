@@ -272,13 +272,7 @@ def add_button_hole(
     return plane
 
 
-# TODO: Implement
 # TODO: Comment
-def calculate_base_from_buttons():
-    pass
-
-
-# TODO: Potential rewrite
 def generate_simple_base(
         base=None,
         buttons=None,
@@ -384,17 +378,17 @@ def generate_simple_base(
     top_base = top_base.translate((base["width"] / 2, base["length"] / 2))
     # Add buttons if it is not none
     if buttons is not None:
-        for button in buttons:
+        for button in buttons.values():
             top_base = add_button_hole(
                 plane=top_base,
-                diameter=button["diameter"] + 2,
+                diameter=(button["diameter"] + 2.0),
                 thickness=base["thickness"],
                 x_offset=button["x"],
                 y_offset=button["y"],
             )
     # Add keys if it is not none
     if keys is not None:
-        for key in keys:
+        for key in keys.values():
             top_base = add_key_hole(
                 plane=top_base,
                 width=(key["units"]["base"] * key["dimensions"]["width"]) + 2,
@@ -402,7 +396,7 @@ def generate_simple_base(
                 thickness=base["thickness"],
                 x_offset=key["x"],
                 y_offset=key["y"],
-                rotation=key["rotation"],
+                rotation=key.get("rotation", 0),
             )
     # Check base is still a dict, and add text if it is not none.
     if isinstance(base, dict) and base.get("text") is not None:
@@ -424,6 +418,12 @@ def generate_modular_base(base=None):
     pass
 
 
+# TODO: Implement
+# TODO: Comment
+def calculate_base_from_parts(buttons=None, keys=None):
+    return {}
+
+
 # TODO: Comment
 # TODO: Rework
 def generate_controller(
@@ -441,7 +441,7 @@ def generate_controller(
             button_steps.append(
                 [
                     generate_button_cap(
-                        diameter=button_values.get("diameter", 24.0),
+                        diameter=button_values["diameter"],
                         thickness=button_values.get("thickness", 2.0),
                         bevel=button_values.get("bevel", False),
                         mount_values=button_values.get("mount", None),
@@ -465,23 +465,26 @@ def generate_controller(
                     key_name,
                 ]
             )
-    return base_top, base_bottom, button_steps, []
+    return base_top, base_bottom, button_steps, key_steps
 
 
 # TODO: Comment
-# TODO: Rework
 def generate_controller_files(
         path="generated_files/", base=None, buttons=None, keys=None
 ):
+    # Generate a base from the buttons and keys
     if base is None:
-        calculate_base_from_buttons()
+        base = calculate_base_from_parts(buttons=buttons, keys=keys)
     base_top, base_bottom, button_steps, key_steps = generate_controller(
         base=base, buttons=buttons, keys=keys
     )
+    # Generate the steps for the top and bottom base
     cq.exporters.export(base_top, path + "base_top.step")
     cq.exporters.export(base_bottom, path + "base_bottom.step")
+    # Generate the steps for the buttons
     for button in button_steps:
         button[0].save(path + button[1] + ".step")
+    # Generate the steps for the keys
     for key in key_steps:
         key[0].save(path + key[1] + ".step")
 
