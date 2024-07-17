@@ -293,6 +293,7 @@ def generate_simple_base(
             "thickness": 5,
             "rounded_edges": False,
             "screw_diameter": 1,
+            "text": None,
         }
     # Set corner positions in advance
     positions = [
@@ -379,6 +380,7 @@ def generate_simple_base(
     top_base = top_base.cut(corner_holes)
     if (base["screw_diameter"] / 2) > 0.0:
         top_base = top_base.cut(screw_holes)
+    # Add buttons if it is not none
     if buttons is not None:
         for button in buttons:
             top_base = add_button_hole(
@@ -388,6 +390,7 @@ def generate_simple_base(
                 x_offset=button["x"],
                 y_offset=button["y"],
             )
+    # Add keys if it is not none
     if keys is not None:
         for key in keys:
             top_base = add_key_hole(
@@ -399,7 +402,8 @@ def generate_simple_base(
                 y_offset=key["y"],
                 rotation=key["rotation"],
             )
-    if base.get("text", None) is not None:
+    # Check base is still a dict, and add text if it is not none.
+    if isinstance(base, dict) and base.get("text") is not None:
         top_base = add_text(
             plane=top_base,
             text=base["text"],
