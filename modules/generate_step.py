@@ -380,6 +380,8 @@ def generate_simple_base(
     top_base = top_base.cut(corner_holes)
     if (base["screw_diameter"] / 2) > 0.0:
         top_base = top_base.cut(screw_holes)
+    # Translate top base to have bottom left in 0,0
+    top_base = top_base.translate((base["width"] / 2, base["length"] / 2))
     # Add buttons if it is not none
     if buttons is not None:
         for button in buttons:
@@ -449,9 +451,20 @@ def generate_controller(
                     button_name,
                 ]
             )
-            offset_x = base["width"] / 2
-            offset_y = base["length"] / 2
-
+    if keys is not None:
+        for key_name, key_values in keys.items():
+            key_steps.append(
+                [
+                    generate_key_cap(
+                        units=key_values.get("units", None),
+                        dimensions=key_values.get("dimensions", None),
+                        bevel=key_values.get("bevel", False),
+                        mount_values=key_values.get("mount", None),
+                        text=key_values.get("text", None),
+                    ),
+                    key_name,
+                ]
+            )
     return base_top, base_bottom, button_steps, []
 
 
