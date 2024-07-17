@@ -1,6 +1,10 @@
 import cadquery as cq
 
 
+# TODO: generate_screen_hole
+# TODO: add screen hole
+
+
 # Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
 def generate_usb_c(usb_c=None):
     if usb_c is None:
