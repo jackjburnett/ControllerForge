@@ -21,14 +21,14 @@ def generate_usb_c(usb_c=None):
 
 # Function the cuts a USB-C receptacle port from a plane
 def add_usb_c(
-        plane=None,
-        usb_c=None,
-        x_offset=0,
-        x_rotate=0,
-        y_offset=0,
-        y_rotate=0,
-        z_offset=0,
-        z_rotate=0,
+    plane=None,
+    usb_c=None,
+    x_offset=0,
+    x_rotate=0,
+    y_offset=0,
+    y_rotate=0,
+    z_offset=0,
+    z_rotate=0,
 ):
     # If there is no plane, then none is returned
     if plane is not None:
@@ -132,7 +132,7 @@ def generate_mount(mount_values=None):
 
 # TODO: Systematic fillet
 def generate_key_cap(
-        units=None, dimensions=None, bevel=False, mount_values=None, text=None
+    units=None, dimensions=None, bevel=False, mount_values=None, text=None
 ):
     # Parameters derived from the dictionaries values
     top_width = units["top"] * dimensions["width"]
@@ -191,14 +191,14 @@ def generate_key_cap(
 
 # Function for adding a hole for a key to a plane, using offsets
 def add_key_hole(
-        plane=None,
-        thickness=0,
-        width=0,
-        length=0,
-        x_offset=0.0,
-        y_offset=0.0,
-        z_offset=0.0,
-        rotation=0,
+    plane=None,
+    thickness=0,
+    width=0,
+    length=0,
+    x_offset=0.0,
+    y_offset=0.0,
+    z_offset=0.0,
+    rotation=0,
 ):
     # If a plane is not passed, None is returned
     if plane is not None:
@@ -220,7 +220,7 @@ def add_key_hole(
 # the default button is 24mm in diameter and 2mm thick with no walls or  bevel
 # the default mount is the Cherry MX clone found on Kailh Red switches
 def generate_button_cap(
-        diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
+    diameter=24.0, thickness=2.0, bevel=False, wall=None, mount_values=None, text=None
 ):
     # Create the top of the button, using the diameter and thickness
     top = cq.Workplane().circle(diameter / 2).extrude(thickness)
@@ -262,7 +262,7 @@ def generate_button_cap(
 
 # Function for adding a hole for a button to a plane, using offsets
 def add_button_hole(
-        plane=None, diameter=0, thickness=0, x_offset=0.0, y_offset=0.0, z_offset=0.0
+    plane=None, diameter=0, thickness=0, x_offset=0.0, y_offset=0.0, z_offset=0.0
 ):
     # If a plane is not passed, None is returned
     if plane is not None:
@@ -282,9 +282,9 @@ def add_button_hole(
 # TODO: Add USB_C
 # TODO: Add screen
 def generate_simple_base(
-        base=None,
-        buttons=None,
-        keys=None,
+    base=None,
+    buttons=None,
+    keys=None,
 ):
     # Set default base parameters
     if base is None:
@@ -435,9 +435,9 @@ def calculate_base_from_parts(buttons=None, keys=None):
 # TODO: Comment
 # TODO: Rework
 def generate_controller(
-        base=None,
-        buttons=None,
-        keys=None,
+    base=None,
+    buttons=None,
+    keys=None,
 ):
     if base.get("modular", False):
         pass
@@ -478,7 +478,7 @@ def generate_controller(
 
 # TODO: Comment
 def generate_controller_files(
-        path="generated_files/", base=None, buttons=None, keys=None
+    path="generated_files/", base=None, buttons=None, keys=None
 ):
     # Generate a base from the buttons and keys
     if base is None:
