@@ -104,7 +104,7 @@
       "bevel": true,
       "mount": {
         "type": "MX",
-        "height": 4.0,
+        "height": 6.0,
         "diameter": 6.0,
         "X_point_width": 4.2,
         "X_point_length": 1.4
@@ -134,7 +134,7 @@
       "bevel": true,
       "mount": {
         "type": "MX",
-        "height": 4.0,
+        "height": 6.0,
         "diameter": 6.0,
         "X_point_width": 4.2,
         "X_point_length": 1.4
@@ -164,7 +164,7 @@
       "bevel": true,
       "mount": {
         "type": "MX",
-        "height": 4.0,
+        "height": 6.0,
         "diameter": 6.0,
         "X_point_width": 4.2,
         "X_point_length": 1.4
@@ -194,7 +194,7 @@
       "bevel": true,
       "mount": {
         "type": "MX",
-        "height": 4.0,
+        "height": 6.0,
         "diameter": 6.0,
         "X_point_width": 4.2,
         "X_point_length": 1.4
