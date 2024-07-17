@@ -188,36 +188,6 @@
         "y": 0
       }
     },
-    "left": {
-      "x": 22,
-      "y": 60,
-      "bevel": true,
-      "mount": {
-        "type": "MX",
-        "height": 4.0,
-        "diameter": 6.0,
-        "X_point_width": 4.2,
-        "X_point_length": 1.4
-      },
-      "units": {
-        "top": 12,
-        "base": 18
-      },
-      "dimensions": {
-        "width": 1,
-        "length": 1,
-        "wall_height": 8,
-        "thickness": 1
-      },
-      "text": {
-        "content": "←",
-        "size": 10,
-        "depth": -1,
-        "font": "Arial",
-        "x": 0,
-        "y": 0
-      }
-    },
     "right": {
       "x": 66,
       "y": 60,

@@ -1,4 +1,5 @@
 import cadquery as cq
+import json
 
 
 # TODO: generate_screen_hole
@@ -129,6 +130,7 @@ def generate_mount(mount_values=None):
     return mount
 
 
+# TODO: Systematic fillet
 def generate_key_cap(
         units=None, dimensions=None, bevel=False, mount_values=None, text=None
 ):
@@ -163,7 +165,7 @@ def generate_key_cap(
     keycap = keycap_body.cut(inner_keycap)
     # Add rounded corners if requested
     if bevel:
-        keycap = keycap.edges().fillet(0.5)
+        keycap = keycap.edges().fillet(0.4)
     # Add text to the keycap
     keycap = add_text(
         plane=keycap,
@@ -277,6 +279,8 @@ def add_button_hole(
 
 
 # TODO: Comment
+# TODO: Add USB_C
+# TODO: Add screen
 def generate_simple_base(
         base=None,
         buttons=None,
@@ -495,142 +499,12 @@ def generate_controller_files(
 
 # TODO: Comment
 if __name__ == "__main__":
-    buttons_dict = {
-        "UP": {
-            "x": 20,
-            "y": 15,
-            "diameter": 30.0,
-            "thickness": 2.0,
-            "bevel": False,
-            "mount": {
-                "type": "MX",
-                "height": 4.0,
-                "diameter": 6.0,
-                "X_point_width": 4.2,
-                "X_point_length": 1.4,
-            },
-            "wall": {
-                "thickness": 1.0,
-                "height": 3.0,
-            },
-            "text": {"content": "UP", "size": 12, "depth": 1, "font": "Arial"},
-        },
-        "DOWN": {
-            "x": 70,
-            "y": 30,
-            "diameter": 24.0,
-            "thickness": 2.0,
-            "bevel": True,
-            "mount": {
-                "type": "MX",
-                "height": 4.0,
-                "diameter": 6.0,
-                "X_point_width": 4.2,
-                "X_point_length": 1.4,
-            },
-            "wall": {
-                "thickness": 1.0,
-                "height": 2.0,
-            },
-            "text": {
-                "content": "down",
-                "size": 12,
-                "depth": -1,
-                "font": "Arial",
-                "x": 0,
-                "y": 0,
-            },
-        },
-        "LEFT": {
-            "x": 60,
-            "y": 20,
-            "diameter": 24.0,
-            "thickness": 2.0,
-            "bevel": True,
-            "mount": {
-                "type": "MX",
-                "height": 4.0,
-                "diameter": 6.0,
-                "X_point_width": 4.2,
-                "X_point_length": 1.4,
-            },
-            "wall": {
-                "thickness": 0.0,
-                "height": 0.0,
-            },
-            "text": {
-                "content": "LeFt",
-                "size": 12,
-                "depth": -1,
-                "font": "Arial",
-                "x": 0,
-                "y": 0,
-            },
-        },
-    }
-    base_dict = {
-        "height": 25,
-        "width": 200,
-        "length": 100,
-        "thickness": 2.5,
-        "bevel": True,
-        "screw_diameter": 3,
-        "text": {
-            "content": "Base",
-            "size": 12,
-            "depth": 1,
-            "font": "Arial",
-            "x": 30,
-            "y": 6,
-        },
-    }
-    keys_dict = {
-        "A": {
-            "x": 70,
-            "y": 30,
-            "bevel": True,
-            "mount": {
-                "type": "MX",
-                "height": 4.0,
-                "diameter": 6.0,
-                "X_point_width": 4.2,
-                "X_point_length": 1.4,
-            },
-            "units": {"top": 15, "base": 20},
-            "dimensions": {"width": 1, "length": 1, "wall_height": 10, "thickness": 2},
-            "text": {
-                "content": "A",
-                "size": 12,
-                "depth": -1,
-                "font": "Arial",
-                "x": 1,
-                "y": 1,
-            },
-        },
-        "B": {
-            "x": 40,
-            "y": 20,
-            "rotation": 45,
-            "bevel": False,
-            "mount": {
-                "type": "MX",
-                "height": 4.0,
-                "diameter": 6.0,
-                "X_point_width": 4.2,
-                "X_point_length": 1.4,
-            },
-            "units": {"top": 20, "base": 25},
-            "dimensions": {"width": 1, "length": 1, "wall_height": 5, "thickness": 2},
-            "text": {
-                "content": "B",
-                "size": 12,
-                "depth": 1,
-                "font": "Arial",
-                "x": -1,
-                "y": -1,
-            },
-        },
-    }
+    with open("test_files/_test.json", encoding="utf-8") as test_file:
+        test_dict = json.load(test_file)
+
     generate_controller_files(
-        path="test_files/", base=base_dict, buttons=buttons_dict, keys=keys_dict
+        path="test_files/",
+        base=test_dict["base"],
+        buttons=test_dict["buttons"],
+        keys=test_dict["keys"],
     )
