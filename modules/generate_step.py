@@ -9,7 +9,7 @@ import cadquery as cq
 
 
 # Function that generates an LCD screen cutout using length, width, and thickness
-def generate_lcd_screen(height, width, thickness, rounded=False):
+def generate_lcd_screen(thickness, height=20, width=25, rounded=False):
     # Create lcd screen
     lcd_screen = cq.Workplane().rect(width, height).extrude(thickness).edges("|Z")
     # Add rounded edges if requested
@@ -18,7 +18,19 @@ def generate_lcd_screen(height, width, thickness, rounded=False):
     return lcd_screen
 
 
-def add_lcd_screen(lcd_screen=None, x_offset=0, y_offset=0):
+# TODO: Comment
+def add_lcd_screen(plane=None, thickness=0, lcd_screen=None, x_offset=0, y_offset=0):
+    if plane is not None:
+        plane = plane.cut(
+            generate_lcd_screen(
+                thickness=thickness,
+                height=lcd_screen.get("height", 20),
+                width=lcd_screen.get("width", 25),
+                rounded=lcd_screen.get("rounded", False),
+            ).translate((x_offset, y_offset))
+        )
+    return plane
+
 
 # Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
 def generate_usb_c(usb_c=None):
@@ -46,16 +58,14 @@ def add_usb_c(
 ):
     # If there is no plane, then none is returned
     if plane is not None:
-        # If there is a plane, a port for the usb-c is cut out of it
-        if usb_c is not None:
-            # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
-            plane = plane.cut(
-                generate_usb_c(usb_c)
-                .translate((x_offset, y_offset, z_offset))
-                .rotate((0, 0, 0), (1, 0, 0), x_rotate)
-                .rotate((0, 0, 0), (0, 1, 0), y_rotate)
-                .rotate((0, 0, 0), (0, 0, 1), z_rotate)
-            )
+        # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
+        plane = plane.cut(
+            generate_usb_c(usb_c)
+            .translate((x_offset, y_offset, z_offset))
+            .rotate((0, 0, 0), (1, 0, 0), x_rotate)
+            .rotate((0, 0, 0), (0, 1, 0), y_rotate)
+            .rotate((0, 0, 0), (0, 0, 1), z_rotate)
+        )
     return plane
 
 
