@@ -3,7 +3,6 @@ import json
 import cadquery as cq
 
 
-# TODO: add screen hole
 # TODO: generate_settings buttons
 # TODO: Add settings buttons
 
@@ -14,7 +13,7 @@ def generate_lcd_screen(thickness, height=20, width=25, rounded=False):
     lcd_screen = cq.Workplane().rect(width, height).extrude(thickness).edges("|Z")
     # Add rounded edges if requested
     if rounded:
-        lcd_screen = lcd_screen.edges("|Z").fillet(0.1)
+        lcd_screen = lcd_screen.edges("|Z").fillet(0.5)
     return lcd_screen
 
 
@@ -432,13 +431,21 @@ def generate_simple_base(
             )
     # Check base is still a dict, and add text if it is not none.
     if isinstance(base, dict):
-        if base.get("text") is not None:
+        if base.get("text", None) is not None:
             top_base = add_text(
                 plane=top_base,
                 text=base["text"],
                 x_offset=base["text"].get("x", 0),
                 y_offset=base["text"].get("y", 0),
                 z_offset=base["thickness"],
+            )
+        if base.get("lcd_screen", None) is not None:
+            top_base = add_lcd_screen(
+                plane=top_base,
+                thickness=base["thickness"],
+                lcd_screen=base["lcd_screen"],
+                x_offset=base["lcd_screen"]["x"],
+                y_offset=base["lcd_screen"]["y"],
             )
     return top_base, bottom_base
 
