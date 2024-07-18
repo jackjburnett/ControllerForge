@@ -464,7 +464,6 @@ def generate_simple_base(
     return top_base, bottom_base
 
 
-# TODO: Add 'modular' option to base
 # TODO: Generate ModularBase ipynb
 # TODO: Comment
 # TODO: Implement
@@ -472,7 +471,6 @@ def generate_modular_base(base=None, buttons=None, keys=None):
     return cq.Workplane()
 
 
-# TODO: Implement
 # TODO: Comment
 def calculate_base_from_parts(buttons=None, keys=None):
     base = {
@@ -519,7 +517,6 @@ def calculate_base_from_parts(buttons=None, keys=None):
 
 
 # TODO: Comment
-# TODO: Rework
 def generate_controller(
     base=None,
     buttons=None,
@@ -566,6 +563,20 @@ def generate_controller(
     return base_top, base_bottom, button_steps, key_steps
 
 
+# TODO: Implement
+# TODO: Comment
+def generate_button_steps(buttons=None):
+    pass
+
+
+# TODO: Implement
+# TODO: Comment
+def generate_key_steps(keys=None):
+    pass
+
+
+# TODO: Rework (generate keys, generate buttons)
+# TODO: Rework (if modular vs if not modular)
 # Function for generating the step files for the controller
 def generate_controller_files(
     path="generated_files/", base=None, buttons=None, keys=None
