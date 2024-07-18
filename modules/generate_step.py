@@ -304,7 +304,6 @@ def add_button_hole(
 
 
 # TODO: Comment
-# TODO: Add USB_C
 def generate_simple_base(
     base=None,
     buttons=None,
@@ -468,13 +467,53 @@ def generate_simple_base(
 # TODO: Generate ModularBase ipynb
 # TODO: Comment
 # TODO: Implement
-def generate_modular_base(base=None):
-    pass
+def generate_modular_base(base=None, buttons=None, keys=None):
+    return cq.Workplane()
 
 
 # TODO: Implement
 # TODO: Comment
 def calculate_base_from_parts(buttons=None, keys=None):
+    base = {
+        "height": 50,
+        "width": 0,
+        "length": 0,
+        "thickness": 4,
+        "bevel": True,
+        "screw_diameter": 0,
+    }
+    max_x = 0
+    max_y = 0
+    for key in keys.values:
+        key_x = key["x"] + (key["units"]["base"] * key["dimensions"]["width"])
+        key_y = key["y"] + (key["units"]["base"] * key["dimensions"]["length"])
+        if key_x > max_x:
+            max_x = key_x
+        if key_y > max_y:
+            max_y = key_y
+    for button in buttons.values():
+        button_x = button["x"] + (button["diameter"] / 2)
+        button_y = button["y"] + (button["diameter"] / 2)
+        if button_x > max_x:
+            max_x = button_x
+        if button_y > max_y:
+            max_y = button_y
+    max_x = max_x + base["thickness"]
+    max_y = max_y + base["thickness"]
+    base["width"] = max_x
+    base["length"] = max_y
+    base["usb_c"] = {
+        "location": {
+            "x": (base["width"] / 2) + 4,
+            "y": base["length"],
+            "z": base["height"] / 2,
+        }
+    }
+    base["lcd_screen"] = {
+        "rounded": True,
+        "x": 30,
+        "y": 30,
+    }
     return {}
 
 
@@ -485,10 +524,14 @@ def generate_controller(
     buttons=None,
     keys=None,
 ):
+    # Generate a base from the buttons and keys
+    if base is None:
+        base = calculate_base_from_parts(buttons=buttons, keys=keys)
     if base.get("modular", False):
-        pass
+        base_top, base_bottom = generate_modular_base(base, buttons, keys)
+    else:
+        base_top, base_bottom = generate_simple_base(base, buttons, keys)
     key_steps = []
-    base_top, base_bottom = generate_simple_base(base, buttons, keys)
     button_steps = []
     if buttons is not None:
         for button_name, button_values in buttons.items():
@@ -522,13 +565,11 @@ def generate_controller(
     return base_top, base_bottom, button_steps, key_steps
 
 
-# TODO: Comment
+# Function for generating the step files for the controller
 def generate_controller_files(
     path="generated_files/", base=None, buttons=None, keys=None
 ):
-    # Generate a base from the buttons and keys
-    if base is None:
-        base = calculate_base_from_parts(buttons=buttons, keys=keys)
+    # Generate the controller base and get button and key information
     base_top, base_bottom, button_steps, key_steps = generate_controller(
         base=base, buttons=buttons, keys=keys
     )
