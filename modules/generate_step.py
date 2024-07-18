@@ -304,6 +304,51 @@ def add_button_hole(
 
 
 # TODO: Comment
+def calculate_base_from_parts(buttons=None, keys=None):
+    base = {
+        "height": 50,
+        "width": 0,
+        "length": 0,
+        "thickness": 4,
+        "bevel": True,
+        "screw_diameter": 0,
+    }
+    max_x = 0
+    max_y = 0
+    for key in keys.values():
+        key_x = key["x"] + (key["units"]["base"] * key["dimensions"]["width"])
+        key_y = key["y"] + (key["units"]["base"] * key["dimensions"]["length"])
+        if key_x > max_x:
+            max_x = key_x
+        if key_y > max_y:
+            max_y = key_y
+    for button in buttons.values():
+        button_x = button["x"] + (button["diameter"] / 2)
+        button_y = button["y"] + (button["diameter"] / 2)
+        if button_x > max_x:
+            max_x = button_x
+        if button_y > max_y:
+            max_y = button_y
+    max_x = max_x + base["thickness"]
+    max_y = max_y + base["thickness"]
+    base["width"] = max_x
+    base["length"] = max_y
+    base["usb_c"] = {
+        "location": {
+            "x": (base["width"] / 2) + 4,
+            "y": base["length"],
+            "z": base["height"] / 2,
+        }
+    }
+    base["lcd_screen"] = {
+        "rounded": True,
+        "x": 30,
+        "y": 30,
+    }
+    return base
+
+
+# TODO: Comment
 def generate_simple_base(
     base=None,
     buttons=None,
@@ -472,128 +517,56 @@ def generate_modular_base(base=None, buttons=None, keys=None):
 
 
 # TODO: Comment
-def calculate_base_from_parts(buttons=None, keys=None):
-    base = {
-        "height": 50,
-        "width": 0,
-        "length": 0,
-        "thickness": 4,
-        "bevel": True,
-        "screw_diameter": 0,
-    }
-    max_x = 0
-    max_y = 0
-    for key in keys.values():
-        key_x = key["x"] + (key["units"]["base"] * key["dimensions"]["width"])
-        key_y = key["y"] + (key["units"]["base"] * key["dimensions"]["length"])
-        if key_x > max_x:
-            max_x = key_x
-        if key_y > max_y:
-            max_y = key_y
-    for button in buttons.values():
-        button_x = button["x"] + (button["diameter"] / 2)
-        button_y = button["y"] + (button["diameter"] / 2)
-        if button_x > max_x:
-            max_x = button_x
-        if button_y > max_y:
-            max_y = button_y
-    max_x = max_x + base["thickness"]
-    max_y = max_y + base["thickness"]
-    base["width"] = max_x
-    base["length"] = max_y
-    base["usb_c"] = {
-        "location": {
-            "x": (base["width"] / 2) + 4,
-            "y": base["length"],
-            "z": base["height"] / 2,
-        }
-    }
-    base["lcd_screen"] = {
-        "rounded": True,
-        "x": 30,
-        "y": 30,
-    }
-    return base
-
-
-# TODO: Comment
-def generate_controller(
-    base=None,
-    buttons=None,
-    keys=None,
-):
-    # Generate a base from the buttons and keys
-    if base is None:
-        base = calculate_base_from_parts(buttons=buttons, keys=keys)
-    if base.get("modular", False):
-        base_top, base_bottom = generate_modular_base(base, buttons, keys)
-    else:
-        base_top, base_bottom = generate_simple_base(base, buttons, keys)
-    key_steps = []
-    button_steps = []
+def generate_button_steps(path="generated_files/", buttons=None):
     if buttons is not None:
         for button_name, button_values in buttons.items():
-            button_steps.append(
-                [
-                    generate_button_cap(
-                        diameter=button_values["diameter"],
-                        thickness=button_values.get("thickness", 2.0),
-                        bevel=button_values.get("bevel", False),
-                        mount_values=button_values.get("mount", None),
-                        wall=button_values.get("wall", None),
-                        text=button_values.get("text", None),
-                    ),
-                    button_name,
-                ]
-            )
+            generate_button_cap(
+                diameter=button_values["diameter"],
+                thickness=button_values.get("thickness", 2.0),
+                bevel=button_values.get("bevel", False),
+                mount_values=button_values.get("mount", None),
+                wall=button_values.get("wall", None),
+                text=button_values.get("text", None),
+            ).save(path + button_name + ".step")
+
+
+# TODO: Comment
+def generate_key_steps(path="generated_files/", keys=None):
     if keys is not None:
         for key_name, key_values in keys.items():
-            key_steps.append(
-                [
-                    generate_key_cap(
-                        units=key_values.get("units", None),
-                        dimensions=key_values.get("dimensions", None),
-                        bevel=key_values.get("bevel", False),
-                        mount_values=key_values.get("mount", None),
-                        text=key_values.get("text", None),
-                    ),
-                    key_name,
-                ]
-            )
-    return base_top, base_bottom, button_steps, key_steps
+            generate_key_cap(
+                units=key_values.get("units", None),
+                dimensions=key_values.get("dimensions", None),
+                bevel=key_values.get("bevel", False),
+                mount_values=key_values.get("mount", None),
+                text=key_values.get("text", None),
+            ).save(path + key_name + ".step")
 
 
-# TODO: Implement
 # TODO: Comment
-def generate_button_steps(buttons=None):
-    pass
-
-
-# TODO: Implement
-# TODO: Comment
-def generate_key_steps(keys=None):
-    pass
-
-
-# TODO: Rework (generate keys, generate buttons)
-# TODO: Rework (if modular vs if not modular)
 # Function for generating the step files for the controller
 def generate_controller_files(
     path="generated_files/", base=None, buttons=None, keys=None
 ):
-    # Generate the controller base and get button and key information
-    base_top, base_bottom, button_steps, key_steps = generate_controller(
-        base=base, buttons=buttons, keys=keys
-    )
-    # Generate the steps for the top and bottom base
-    cq.exporters.export(base_top, path + "base_top.step")
-    cq.exporters.export(base_bottom, path + "base_bottom.step")
+    if base is None:
+        base = calculate_base_from_parts(buttons=buttons, keys=keys)
+    if base.get("modular", False):
+        module_base, left_module, right_module, settings_module = generate_modular_base(
+            base, buttons, keys
+        )
+        cq.exporters.export(left_module, path + "left_module.step")
+        cq.exporters.export(right_module, path + "right_module.step")
+        cq.exporters.export(settings_module, path + "settings_module.step")
+        cq.exporters.export(module_base, path + "module_base.step")
+    else:
+        base_top, base_bottom = generate_simple_base(base, buttons, keys)
+        # Generate the steps for the top and bottom base
+        cq.exporters.export(base_top, path + "base_top.step")
+        cq.exporters.export(base_bottom, path + "base_bottom.step")
     # Generate the steps for the buttons
-    for button in button_steps:
-        button[0].save(path + button[1] + ".step")
+    generate_button_steps(path=path, buttons=buttons)
     # Generate the steps for the keys
-    for key in key_steps:
-        key[0].save(path + key[1] + ".step")
+    generate_key_steps(path=path, keys=keys)
 
 
 # If this function is ran directly, use the test json to create a controller
