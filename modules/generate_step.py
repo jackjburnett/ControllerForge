@@ -392,10 +392,11 @@ def generate_simple_base(
         corner_hole = (
             cq.Workplane().circle(corner_radius / 2).extrude(base["thickness"])
         )
-        screw_hole = cq.Workplane()
+        screw_hole = None
     for pos in positions:
         corner_holes = corner_holes.union(corner_hole.translate(pos))
-        screw_holes = screw_holes.union(screw_hole.translate(pos))
+        if screw_hole is not None:
+            screw_holes = screw_holes.union(screw_hole.translate(pos))
     bottom_base = bottom_base.union(
         corner_holes.translate((0, 0, base["height"] - base["thickness"]))
     )
@@ -484,7 +485,7 @@ def calculate_base_from_parts(buttons=None, keys=None):
     }
     max_x = 0
     max_y = 0
-    for key in keys.values:
+    for key in keys.values():
         key_x = key["x"] + (key["units"]["base"] * key["dimensions"]["width"])
         key_y = key["y"] + (key["units"]["base"] * key["dimensions"]["length"])
         if key_x > max_x:
@@ -514,7 +515,7 @@ def calculate_base_from_parts(buttons=None, keys=None):
         "x": 30,
         "y": 30,
     }
-    return {}
+    return base
 
 
 # TODO: Comment
@@ -592,7 +593,7 @@ if __name__ == "__main__":
     # Generate a controller using the test parameters
     generate_controller_files(
         path="test_files/",
-        base=test_dict["base"],
+        base=test_dict.get("base", None),
         buttons=test_dict["buttons"],
         keys=test_dict["keys"],
     )

@@ -325,7 +325,7 @@
     "length": 120,
     "thickness": 4,
     "bevel": true,
-    "screw_diameter": 1,
+    "screw_diameter": 0,
     "text": {
       "content": "ControllerForge",
       "size": 6,
