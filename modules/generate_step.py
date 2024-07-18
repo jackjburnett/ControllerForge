@@ -13,11 +13,11 @@ def generate_lcd_screen(thickness, height=20, width=25, rounded=False):
     lcd_screen = cq.Workplane().rect(width, height).extrude(thickness).edges("|Z")
     # Add rounded edges if requested
     if rounded:
-        lcd_screen = lcd_screen.edges("|Z").fillet(0.5)
+        lcd_screen = lcd_screen.edges("|Z").fillet(0.49)
     return lcd_screen
 
 
-# TODO: Comment
+# Function that adds an lcd screen to a plane, using the thickness and 2d-axis offsets.
 def add_lcd_screen(plane=None, thickness=0, lcd_screen=None, x_offset=0, y_offset=0):
     if plane is not None:
         plane = plane.cut(
@@ -32,15 +32,16 @@ def add_lcd_screen(plane=None, thickness=0, lcd_screen=None, x_offset=0, y_offse
 
 
 # Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
-def generate_usb_c(usb_c=None):
+def generate_usb_c(usb_c=None, thickness=0):
     if usb_c is None:
-        usb_c = {"height": 4, "width": 11, "corner_radius": 1, "wall_thickness": 2}
+        usb_c = {"height": 4, "width": 11, "corner_radius": 1}
     return (
         cq.Workplane()
         .rect(usb_c["width"], usb_c["height"])
-        .extrude(usb_c["wall_thickness"])
+        .extrude(thickness)
         .edges("|Z")
         .fillet(usb_c["corner_radius"])
+        .rotate((0, 0, 0), (1, 0, 0), 90)
     )
 
 
@@ -48,6 +49,7 @@ def generate_usb_c(usb_c=None):
 def add_usb_c(
     plane=None,
     usb_c=None,
+    thickness=0,
     x_offset=0,
     x_rotate=0,
     y_offset=0,
@@ -59,7 +61,7 @@ def add_usb_c(
     if plane is not None:
         # The usb-c is generated using generate_usb_c, then translated using the offsets and rotated as necessary
         plane = plane.cut(
-            generate_usb_c(usb_c)
+            generate_usb_c(usb_c=usb_c, thickness=thickness)
             .translate((x_offset, y_offset, z_offset))
             .rotate((0, 0, 0), (1, 0, 0), x_rotate)
             .rotate((0, 0, 0), (0, 1, 0), y_rotate)
@@ -303,7 +305,6 @@ def add_button_hole(
 
 # TODO: Comment
 # TODO: Add USB_C
-# TODO: Add screen
 def generate_simple_base(
     base=None,
     buttons=None,
@@ -405,8 +406,9 @@ def generate_simple_base(
     top_base = top_base.cut(corner_holes)
     if (base["screw_diameter"] / 2) > 0.0:
         top_base = top_base.cut(screw_holes)
-    # Translate top base to have bottom left in 0,0
+    # Translate top and bottom base to have bottom left in 0,0
     top_base = top_base.translate((base["width"] / 2, base["length"] / 2))
+    bottom_base = bottom_base.translate((base["width"] / 2, base["length"] / 2))
     # Add buttons if it is not none
     if buttons is not None:
         for button in buttons.values():
@@ -446,6 +448,18 @@ def generate_simple_base(
                 lcd_screen=base["lcd_screen"],
                 x_offset=base["lcd_screen"]["x"],
                 y_offset=base["lcd_screen"]["y"],
+            )
+        if base.get("usb_c", None) is not None:
+            bottom_base = add_usb_c(
+                plane=bottom_base,
+                usb_c=base["usb_c"].get("dimensions", None),
+                thickness=base["thickness"],
+                x_offset=base["usb_c"]["location"]["x"],
+                x_rotate=base["usb_c"]["location"].get("x_rotate", 0),
+                y_offset=base["usb_c"]["location"]["y"],
+                y_rotate=base["usb_c"]["location"].get("y_rotate", 0),
+                z_offset=base["usb_c"]["location"]["z"],
+                z_rotate=base["usb_c"]["location"].get("z_rotate", 0),
             )
     return top_base, bottom_base
 
@@ -529,11 +543,12 @@ def generate_controller_files(
         key[0].save(path + key[1] + ".step")
 
 
-# TODO: Comment
+# If this function is ran directly, use the test json to create a controller
 if __name__ == "__main__":
+    # Open the test json
     with open("test_files/_test.json", encoding="utf-8") as test_file:
         test_dict = json.load(test_file)
-
+    # Generate a controller using the test parameters
     generate_controller_files(
         path="test_files/",
         base=test_dict["base"],
