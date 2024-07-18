@@ -1,12 +1,24 @@
-import cadquery as cq
 import json
 
+import cadquery as cq
 
-# TODO: generate_screen_hole
+
 # TODO: add screen hole
 # TODO: generate_settings buttons
 # TODO: Add settings buttons
 
+
+# Function that generates an LCD screen cutout using length, width, and thickness
+def generate_lcd_screen(height, width, thickness, rounded=False):
+    # Create lcd screen
+    lcd_screen = cq.Workplane().rect(width, height).extrude(thickness).edges("|Z")
+    # Add rounded edges if requested
+    if rounded:
+        lcd_screen = lcd_screen.edges("|Z").fillet(0.1)
+    return lcd_screen
+
+
+def add_lcd_screen(lcd_screen=None, x_offset=0, y_offset=0):
 
 # Function that generates a USB-C receptacle port cutout using a height, width, corner radius, and wall thickness
 def generate_usb_c(usb_c=None):
@@ -409,14 +421,15 @@ def generate_simple_base(
                 rotation=key.get("rotation", 0),
             )
     # Check base is still a dict, and add text if it is not none.
-    if isinstance(base, dict) and base.get("text") is not None:
-        top_base = add_text(
-            plane=top_base,
-            text=base["text"],
-            x_offset=base["text"].get("x", 0),
-            y_offset=base["text"].get("y", 0),
-            z_offset=base["thickness"],
-        )
+    if isinstance(base, dict):
+        if base.get("text") is not None:
+            top_base = add_text(
+                plane=top_base,
+                text=base["text"],
+                x_offset=base["text"].get("x", 0),
+                y_offset=base["text"].get("y", 0),
+                z_offset=base["thickness"],
+            )
     return top_base, bottom_base
 
 
