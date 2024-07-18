@@ -476,8 +476,9 @@ def generate_simple_base(
                 y_offset=key["y"],
                 rotation=key.get("rotation", 0),
             )
-    # Check base is still a dict, and add text if it is not none.
+    # Check base is still a dict
     if isinstance(base, dict):
+        # TODO: Comment
         if base.get("text", None) is not None:
             top_base = add_text(
                 plane=top_base,
