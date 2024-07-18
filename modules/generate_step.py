@@ -329,15 +329,15 @@ def calculate_base_from_parts(buttons=None, keys=None):
             max_x = button_x
         if button_y > max_y:
             max_y = button_y
-    max_x = max_x + base["thickness"]
-    max_y = max_y + base["thickness"]
+    max_x += base["thickness"]
+    max_y += base["thickness"]
     base["width"] = max_x
     base["length"] = max_y
     base["usb_c"] = {
         "location": {
             "x": (base["width"] / 2) + 4,
             "y": base["length"],
-            "z": base["height"] / 2,
+            "z": (base["height"] / 2),
         }
     }
     base["lcd_screen"] = {
