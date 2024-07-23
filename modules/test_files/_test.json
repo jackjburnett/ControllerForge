@@ -197,7 +197,7 @@
     "UP": {
       "x": 51.5,
       "y": 80,
-      "rotation": -20,
+      "rotation": 20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -228,7 +228,7 @@
     "LEFT": {
       "x": 22,
       "y": 68,
-      "rotation": -20,
+      "rotation": 20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -259,7 +259,7 @@
     "DOWN": {
       "x": 44,
       "y": 60,
-      "rotation": -20,
+      "rotation": 20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -290,7 +290,7 @@
     "RIGHT": {
       "x": 66,
       "y": 52,
-      "rotation": -20,
+      "rotation": 20,
       "bevel": true,
       "mount": {
         "type": "MX",
@@ -334,7 +334,7 @@
       "x": 40,
       "y": 10
     },
-    "usb_c":{
+    "usb_c": {
       "location": {
         "x": 120,
         "y": 120,
