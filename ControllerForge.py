@@ -4,7 +4,7 @@ from flask import Flask, send_file, request, jsonify
 
 from modules import train_model, predict_parameters, generate_step
 from parameter_store import default_values
-from utils import pipeline_test, step2stl, zipfiles
+from utils import pipeline_test, zipfiles
 
 app = Flask(__name__)
 
@@ -51,13 +51,20 @@ def generate_step_call():
                 buttons = json_data["buttons"]
             else:
                 buttons = None
+            if "keys" in json_data:
+                keys = json_data["keys"]
+            else:
+                keys = None
             if "base" in json_data:
                 base = json_data["base"]
             else:
                 base = None
 
-            generate_step.generate_controller_files(base=base, buttons=buttons)
-            zipfiles.zip_controller_files(buttons=buttons)
+            generate_step.generate_controller_files(
+                base=base, buttons=buttons, keys=keys
+            )
+
+            zipfiles.zip_controller_files(buttons=buttons, keys=keys)
             return send_file(
                 "generated_files/controller_files.zip",
                 download_name="controller_files.zip",
@@ -73,7 +80,6 @@ def generate_step_call():
 # https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
 @app.route("/generate_stl", methods=["POST"])
 def generate_stl_call():
-    step2stl.step2stl("generated_files/controller.step")
     pass
 
 

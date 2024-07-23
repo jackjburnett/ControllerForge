@@ -1,7 +1,7 @@
 import json
 
 from modules import generate_step, get_model, train_model
-from utils import step2stl, zipfiles
+from utils import zipfiles
 
 
 def pipeline_test():
@@ -23,7 +23,7 @@ def pipeline_test():
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
                 "diameter": (kailh["Red"]["dimensions"]["mount"]["X_point_width"] / 2)
-                            + 1,
+                + 1,
                 "X_point_width": kailh["Red"]["dimensions"]["mount"]["X_point_width"],
                 "X_point_length": kailh["Red"]["dimensions"]["mount"]["X_point_length"],
             },
@@ -42,7 +42,7 @@ def pipeline_test():
                 "type": kailh["Red"]["dimensions"]["mount"]["type"],
                 "height": kailh["Red"]["dimensions"]["mount"]["height"],
                 "diameter": (kailh["Red"]["dimensions"]["mount"]["X_point_width"] / 2)
-                            + 1,
+                + 1,
                 "X_point_width": kailh["Red"]["dimensions"]["mount"]["X_point_width"],
                 "X_point_length": kailh["Red"]["dimensions"]["mount"]["X_point_length"],
             },
@@ -57,11 +57,10 @@ def pipeline_test():
         "screw_radius": 1,
         "corner_radius": 5,
     }
+    keys = {}
 
-    generate_stl.generate_controller_files(base=base, buttons=buttons)
-    step2stl.step2stl("generated_files/controller.step")
+    generate_step.generate_controller_files(base=base, buttons=buttons, keys=keys)
     zipfiles.zip_controller_files(base=base, buttons=buttons)
-
     get_model.get_model()
     return "Pipeline Test Complete"
 
