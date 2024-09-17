@@ -1,0 +1,1399 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "buttons": {
+      "type": "object",
+      "properties": {
+        "X": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "A": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "B": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "Y": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "RB": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "LB": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "RT": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        },
+        "LT": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "diameter": {
+              "type": "number"
+            },
+            "thickness": {
+              "type": "number"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "wall": {
+              "type": "object",
+              "properties": {
+                "thickness": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "thickness",
+                "height"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "integer"
+                },
+                "font": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "diameter",
+            "thickness",
+            "bevel",
+            "mount",
+            "wall",
+            "text"
+          ]
+        }
+      },
+      "required": [
+        "X",
+        "A",
+        "B",
+        "Y",
+        "RB",
+        "LB",
+        "RT",
+        "LT"
+      ]
+    },
+    "keys": {
+      "type": "object",
+      "properties": {
+        "UP": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "rotation": {
+              "type": "integer"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "units": {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "integer"
+                },
+                "base": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "top",
+                "base"
+              ]
+            },
+            "dimensions": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "length": {
+                  "type": "integer"
+                },
+                "wall_height": {
+                  "type": "integer"
+                },
+                "thickness": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "width",
+                "length",
+                "wall_height",
+                "thickness"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "number"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font",
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "rotation",
+            "bevel",
+            "mount",
+            "units",
+            "dimensions",
+            "text"
+          ]
+        },
+        "LEFT": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "rotation": {
+              "type": "integer"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "units": {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "integer"
+                },
+                "base": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "top",
+                "base"
+              ]
+            },
+            "dimensions": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "length": {
+                  "type": "integer"
+                },
+                "wall_height": {
+                  "type": "integer"
+                },
+                "thickness": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "width",
+                "length",
+                "wall_height",
+                "thickness"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "number"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font",
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "rotation",
+            "bevel",
+            "mount",
+            "units",
+            "dimensions",
+            "text"
+          ]
+        },
+        "DOWN": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "rotation": {
+              "type": "integer"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "units": {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "integer"
+                },
+                "base": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "top",
+                "base"
+              ]
+            },
+            "dimensions": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "length": {
+                  "type": "integer"
+                },
+                "wall_height": {
+                  "type": "integer"
+                },
+                "thickness": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "width",
+                "length",
+                "wall_height",
+                "thickness"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "number"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font",
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "rotation",
+            "bevel",
+            "mount",
+            "units",
+            "dimensions",
+            "text"
+          ]
+        },
+        "RIGHT": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "rotation": {
+              "type": "integer"
+            },
+            "bevel": {
+              "type": "boolean"
+            },
+            "mount": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "diameter": {
+                  "type": "number"
+                },
+                "X_point_width": {
+                  "type": "number"
+                },
+                "X_point_length": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "height",
+                "diameter",
+                "X_point_width",
+                "X_point_length"
+              ]
+            },
+            "units": {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "integer"
+                },
+                "base": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "top",
+                "base"
+              ]
+            },
+            "dimensions": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "length": {
+                  "type": "integer"
+                },
+                "wall_height": {
+                  "type": "integer"
+                },
+                "thickness": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "width",
+                "length",
+                "wall_height",
+                "thickness"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "integer"
+                },
+                "depth": {
+                  "type": "number"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "content",
+                "size",
+                "depth",
+                "font",
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "rotation",
+            "bevel",
+            "mount",
+            "units",
+            "dimensions",
+            "text"
+          ]
+        }
+      },
+      "required": [
+        "UP",
+        "LEFT",
+        "DOWN",
+        "RIGHT"
+      ]
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "thickness": {
+          "type": "integer"
+        },
+        "bevel": {
+          "type": "boolean"
+        },
+        "screw_diameter": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string"
+            },
+            "size": {
+              "type": "integer"
+            },
+            "depth": {
+              "type": "integer"
+            },
+            "font": {
+              "type": "string"
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "content",
+            "size",
+            "depth",
+            "font",
+            "x",
+            "y"
+          ]
+        },
+        "usb_c": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "integer"
+                },
+                "y": {
+                  "type": "integer"
+                },
+                "z": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ]
+            }
+          },
+          "required": [
+            "location"
+          ]
+        },
+        "lcd_screen": {
+          "type": "object",
+          "properties": {
+            "rounded": {
+              "type": "boolean"
+            },
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "rounded",
+            "x",
+            "y"
+          ]
+        }
+      },
+      "required": [
+        "height",
+        "width",
+        "length",
+        "thickness",
+        "bevel",
+        "screw_diameter",
+        "text",
+        "usb_c",
+        "lcd_screen"
+      ]
+    }
+  },
+  "required": [
+    "buttons",
+    "keys"
+  ]
+}
